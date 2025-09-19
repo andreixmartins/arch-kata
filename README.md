@@ -93,15 +93,17 @@ Before you need list all your major decisions, them run tradeoffs on than.
 example:
 Major Decisions: 
 ```
-1. Use a relational database to ensure data integrity and support complex queries.
-2. Prioritize extreme performance (~1ms latency) for all database operations.
-3. Choose a fully managed service to ensure high availability and minimize operational overhead.
-4. Optimize for long-term developer productivity and system reliability over absolute lowest cost.
+1. One mobile code base - should be (...)
+2. Reusable capability and low latency backends should be (...)
+3. Cache efficiency therefore should do (...)
+4. Prioritize extreme performance (~1ms latency) for all database operations.
+5. Choose a fully managed service to ensure high availability and minimize operational overhead.
 ```
 Tradeoffs:
 ```
-1. AWS Aurora PostgreSQL vs. AWS RDS for PostgreSQL
-2. AWS Aurora PostgreSQL vs. Self-Managed PostgreSQL on EC2
+1. React Native vs (Flutter and Native)
+2. Serverless vs Microservices
+3. Redis vs Enbeded Caches
 ```
 Each tradeoff line need to be:
 ```
