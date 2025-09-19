@@ -24,33 +24,33 @@ Amazon CloudFront is AWS's Content Delivery Network (CDN) service that:
 
 ## Trade-offs Comparison
 
-### PROS (+)
+### 1. CloudFront
 
-**CloudFront Advantages over Cloudflare:**
+**PROS (+)**
+- **Cost**: Zero AWS egress fees (saves ~$270/month per 100GB daily transfer, $30,000+ annually for video-intensive workloads)
+- **Setup and Maintenance**: Native AWS integration with direct IAM, Cognito, and S3 integration; no API keys or separate authentication layers needed
+- **Performance**: HTTP/2/3 support and smart routing; regional caches + AWS backbone optimization
+- **Scalability**: 450+ edge locations worldwide with regional caches
+- **Availability**: Built-in DDoS protection via AWS Shield; São Paulo edge location with AWS Brazil entity for compliance
+- **Observability**: Unified CloudWatch dashboard for all metrics
 
-- **Zero AWS Egress Fees**: No data transfer costs from AWS services to CloudFront, saving ~$270/month per 100GB daily transfer compared to Cloudflare's $0.09/GB egress charges.
+**CONS (-)**
+- **Performance**: Slower cache invalidations (10-15 minutes to purge cache globally)
+- **Complexity**: Less configuration flexibility; no equivalent to Cloudflare's Page Rules for complex caching logic
 
-- **Native AWS Integration**: Direct IAM, Cognito, and S3 integration without API keys or separate authentication layers, unlike Cloudflare's complex AWS integration requiring custom scripts.
+### 2. Cloudflare
 
-- **Unified Observability**: Single CloudWatch dashboard for all metrics versus Cloudflare's split between Cloudflare Analytics and AWS monitoring.
+**PROS (+)**
+- **Cost**: Superior free tier includes WAF, DDoS protection, and SSL at no cost; predictable flat-rate unlimited bandwidth on paid plans
+- **Performance**: Instant cache purge; superior edge computing capabilities
+- **Scalability**: Global network with advanced edge computing
 
-- **Brazilian Compliance**: São Paulo edge location with AWS Brazil entity simplifies tax compliance, while Cloudflare requires Enterprise plan for regional data controls.
-
-### CONS (-)
-
-- **Slower Invalidations**: 10-15 minutes to purge cache globally compared to Cloudflare's instant purge.
-
-- **Less Configuration Flexibility**: No equivalent to Cloudflare's Page Rules for complex caching logic.
-
-- **Superior Free Tier**: Cloudflare includes WAF, DDoS protection, and SSL at no cost, while CloudFront's WAF costs extra ($5/month + usage).
-
-- **Predictable Pricing**: Flat-rate unlimited bandwidth on paid plans versus CloudFront's complex regional pricing.
-
-- **Split Authentication**: Cannot directly use AWS Cognito tokens, requiring additional proxy layers.
-
-- **High AWS Egress Costs**: Adds $2,700+/month for 100GB daily video transfer due to AWS egress fees.
-
-- **Complex Integration**: Requires separate Terraform providers, API key management, and custom synchronization scripts.
+**CONS (-)**
+- **Cost**: High AWS egress costs ($2,700+/month for 100GB daily video transfer); CloudFront WAF costs extra ($5/month + usage)
+- **Setup and Maintenance**: Complex AWS integration requiring separate Terraform providers, API key management overhead, custom synchronization scripts required
+- **Complexity**: Requires additional proxy layers for AWS Cognito token integration
+- **Availability**: Requires Enterprise plan for regional data controls
+- **Observability**: Split monitoring between Cloudflare Analytics and AWS monitoring
 
 ## Recommendation
 
