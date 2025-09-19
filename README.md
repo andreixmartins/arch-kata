@@ -104,11 +104,35 @@ Tradeoffs:
 3. Redis vs Enbeded Caches
 ```
 Each tradeoff line need to be:
+
+## Security
+### Cognito:
 ```
+
 PROS (+) 
-  * Benefit: Explanation that justify why the benefit is true.
+  * Easy to setup SMS MFA: Phone verification is provided out of the box, the web page and verification logic is provided by it.
+  * Great support for Mobile Apps: There are Android and iOS SDKs available
+  * Fully managed by AWS, cloud-based
 CONS (+)
-  * Problem: Explanation that justify why the problem is true.
+  * User pool in AWS Cognito is not multi-tenant: In order to create a multi-tenant system we have to have a dedicated user pool per tenant.
+  * Limitation of 1000 user pools per AWS account: very little if we want to scale a multi-tenant application.
+  * Limited Customization
+  * Tight AWS ecosystem integration (it might not apply to our case since we are all AWS)
+```
+
+### Keycloak:
+```
+
+PROS (+) 
+  * Easily configurable to multi-tenant
+  * Open-source, self hosted
+  * Cost: Free (Infrastructure costs apply)
+  * Highly customizable
+  * Platform-agnostic
+CONS (+)
+  * User pool in AWS Cognito is not multi-tenant: In order to create a multi-tenant system we have to have a dedicated user pool per tenant.
+  * Limitation of 1000 user pools per AWS account: very little if we want to scale a multi-tenant application.
+  * No Native SDKs Available
 ```
 PS: Be careful to not confuse problem with explanation. 
 <BR/>Recommended reading: http://diego-pacheco.blogspot.com/2023/07/tradeoffs.html
