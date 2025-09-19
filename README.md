@@ -131,6 +131,73 @@ PROS (+)
 CONS (-)
   * Problem: Managed Service Constraints. You trade control for convenience. You have limited access to the underlying OS and cannot fine-tune every low-level database or system parameter. You are also dependent on AWS's timeline for support of new database versions and features.
 ```
+## Dojo Session
+
+### Livekit VS MediaSoup
+
+```
+PROS (+)
+
+- High-Level Framework (LiveKit): Provides built-in signaling, room management, track control, and user roles — all abstracted and ready to use.
+
+- SDK Availability (LiveKit): Comes with well-maintained SDKs for Web, iOS, Android, and Flutter — dramatically reduces frontend complexity.
+
+- Low-Level Control (MediaSoup): Gives complete control over WebRTC internals like RTP/RTCP, transports, and simulcast — ideal for custom or experimental systems.
+
+- Protocol Flexibility (MediaSoup): You can build your own signaling and room models, unbound by existing assumptions.
+
+- Collaborative Features (LiveKit): Ideal for 1:1 interviews, classrooms, and small group code sessions; supports screen sharing, muting, camera/mic toggling natively.
+
+- Turnkey Recording & Egress (LiveKit): Has built-in APIs for recording sessions, RTMP/HLS streaming, and cloud archiving.
+
+- Custom Media Flow (MediaSoup): Allows you to write logic for how each RTP stream is routed, transformed, or prioritized.
+
+- Advanced Routing (MediaSoup): Great for building custom conferencing models (e.g., active speaker detection, selective forwarding with complex policies).
+
+- Low SaaS Pricing (LiveKit Cloud): Ideal for early-stage products — pay-per-minute model is cost-effective under ~500 users.
+
+- Cheap Self-Hosting (LiveKit): Easy to host in Docker/K8s with minimal resources; good cost/performance balance at medium scale.
+
+- Custom Infra Optimization (MediaSoup): Full control over infra lets you optimize for specific use cases (e.g., 1 broadcaster, many passive viewers).
+
+- Bandwidth Efficiency (MediaSoup): Advanced routing can reduce bandwidth costs at scale, especially for large sessions.
+
+CONS (-)
+
+- Customization Limits (LiveKit): The abstraction is opinionated, making deep changes to signaling or media logic harder without forking.
+
+- DIY Architecture (MediaSoup): You must build everything from scratch — signaling, session logic, connection negotiation, etc.
+
+- No SDKs (MediaSoup): Developers must directly handle WebRTC on the client, increasing frontend development time.
+
+- Steep Learning Curve (MediaSoup): Requires deep knowledge of real-time media protocols and concurrency management.
+
+- Dev Time Cost (MediaSoup): Building a production-ready media system from scratch can take months and multiple engineers.
+
+- Infra Cost (MediaSoup): Requires high-performance machines for C++ workers and load balancing — more expensive per node.
+
+- SaaS Cost Growth (LiveKit): At scale (e.g., >1,000 users), LiveKit Cloud becomes more expensive than self-hosting.
+
+- Custom Recording = Extra Infra (MediaSoup): If you need recording or HLS/RTMP streaming, you’ll need to build and scale this separately.
+```
+
+### Final Recommendation: Use LiveKit
+
+Why?
+
+```
+- You get battle-tested signaling, media routing, SDKs, scaling, and observability out-of-the-box.
+
+- Perfect fit for low-latency 1:1 and small group live coding sessions.
+
+- Lower ops burden for a small or mid-size engineering team.
+
+- You can ship a working MVP in weeks, not months.
+```
+
+
+
+
 PS: Be careful to not confuse problem with explanation. 
 <BR/>Recommended reading: http://diego-pacheco.blogspot.com/2023/07/tradeoffs.html
 
