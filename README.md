@@ -112,24 +112,49 @@ PROS (+)
 CONS (+)
   * Problem: Explanation that justify why the problem is true.
 
-
-1. AWS Aurora PostgreSQL vs. AWS RDS for PostgreSQL
+1. Amazon Keyspaces vs. AWS RDS Aurora (PostgreSQL-Compatible)
 PROS (+)
-  * Benefit: Superior Performance Architecture. Aurora's cloud-native, decoupled storage layer is specifically engineered for high throughput and low-latency I/O, making the consistent ~1ms performance target achievable. While RDS relies on network-attached EBS storage, which introduces inherent latency. Even the fastest io2 EBS volumes typically have latencies in the low milliseconds, making it extremely difficult to consistently stay under the 1ms threshold, especially for write operations and uncached reads under load.
-CONS (-)
-  * Problem: Higher Financial Cost. Aurora has a more complex and expensive pricing model based on instance size, storage consumption, and I/O operations, leading to a higher monthly bill compared to standard RDS.
+- Complexity: Keyspaces is fully serverless, no instance sizing or cluster design. Aurora requires careful sizing of compute and storage.
+- Scalability: Keyspaces auto-scales throughput and storage; Aurora requires manual scaling or Aurora Serverless v2 (with limitations).
+- Availability: Keyspaces handles multi-AZ replication automatically, while Aurora requires managing failover events.
+- Cost: Pay-per-request pricing in Keyspaces is cost-efficient for spiky workloads; Aurora incurs continuous instance charges.
+- Setup & Maintenance: Keyspaces has zero maintenance overhead; Aurora requires DB parameter tuning and I/O optimization.
+CONS (–)
+- Performance: Aurora excels for real-time transactional workloads with strong consistency; Keyspaces is optimized for partition-based, high-volume workloads like time-series or IoT.
+- Limitations: Keyspaces does not support joins, triggers, or advanced SQL features; Aurora supports full relational SQL.
+- Latency: Aurora can provide sub-millisecond local reads; Keyspaces has higher network-based latencies.
+- Disk Usage Overhead: Aurora’s storage layer is efficient; Keyspaces stores data redundantly across zones, potentially increasing storage costs.
+- Observability / Monitoring: Aurora integrates with Performance Insights; Keyspaces relies on CloudWatch metrics with less granularity.
 
-2. AWS Aurora PostgreSQL vs. Self-Managed PostgreSQL on EC2
+2. Amazon Keyspaces vs. AWS RDS for PostgreSQL
 PROS (+)
-  * Benefit: Reduced Operational Complexity. As a fully managed service, Aurora automates provisioning, patching, backups, and, most critically, high-availability failover, freeing developers from database administration tasks.
-CONS (-)
-  * Problem: Less Granular Control. Choosing Aurora means accepting AWS's managed path, which involves less direct control over underlying OS and database engine tuning compared to a self-managed instance on EC2.
+- Complexity: Keyspaces eliminates all infrastructure decisions; RDS requires provisioning instances, storage, and replication.
+- Scalability: Keyspaces scales seamlessly with workload; RDS scaling is tied to instance classes and storage resizing.
+- Availability: Keyspaces automatically replicates across multiple AZs; RDS uses Multi-AZ failover with 60–120s downtime.
+- Setup & Maintenance: Keyspaces has no patching or backups; RDS still requires operational planning.
+- Cost: Pay-per-use pricing benefits variable workloads; RDS pricing is predictable for steady workloads.
+CONS (–)
+- Performance: RDS is optimized for real-time transactional workloads with strong ACID compliance; Keyspaces provides tunable consistency but not full ACID.
+- Limitations: Keyspaces does not support relational queries, foreign keys, or complex joins; RDS supports full SQL and PL/pgSQL.
+- Latency: Keyspaces latencies are typically higher than RDS for single-row transactional lookups.
+- Disk Usage Overhead: RDS lets you control EBS volume type; Keyspaces abstracts storage, potentially increasing costs at scale.
+- Observability / Monitoring: RDS integrates with CloudWatch, Enhanced Monitoring, and Performance Insights; Keyspaces only provides CloudWatch metrics with limited query profiling.
 
-3. AWS Aurora PostgreSQL vs. Apache Cassandra
+3. Amazon Keyspaces vs. Apache Cassandra (Self-Managed on AWS)
 PROS (+)
-  * Benefit: Fully Managed by AWS. AWS handles all underlying infrastructure, including provisioning, patching, backups, failure detection, and failover. The management interface is integrated into the AWS console, CLI, and APIs, providing a seamless experience with other AWS services. This drastically reduces the operational burden on your team.
-CONS (-)
-  * Problem: Managed Service Constraints. You trade control for convenience. You have limited access to the underlying OS and cannot fine-tune every low-level database or system parameter. You are also dependent on AWS's timeline for support of new database versions and features.
+- Complexity: Keyspaces removes all cluster design, node scaling, and replication management; Cassandra requires expertise to configure ring topology.
+- Scalability: Keyspaces scales automatically; Cassandra scaling requires manual node provisioning and balancing.
+- Availability: Keyspaces ensures multi-AZ fault tolerance by default; Cassandra requires manual replication factor setup.
+- Performance: Keyspaces delivers predictable performance without compaction overhead; Cassandra can suffer from write amplification and compaction stalls.
+- Cost: Keyspaces avoids EC2/EBS and admin costs; Cassandra adds infra plus significant operational costs.
+- Setup & Maintenance: Keyspaces is zero-maintenance; Cassandra requires ops for backups, patches, upgrades, and monitoring.
+- Latency: Keyspaces provides consistent regional latency; Cassandra may give lower latency only with carefully tuned local clusters.
+- Observability / Monitoring: Keyspaces integrates with CloudWatch automatically; Cassandra requires deploying and managing monitoring tools.
+CONS (–)
+- Limitations: Keyspaces has fewer tunables; Cassandra allows deep control over consistency, partitioning, compaction, and caching strategies.
+- Disk Usage Overhead: Cassandra allows storage-level tuning; Keyspaces abstracts storage, potentially increasing costs for large datasets.
+- Vendor Lock-in: Keyspaces ties you to AWS; Cassandra runs on any cloud or on-prem.
+
 ```
 PS: Be careful to not confuse problem with explanation. 
 <BR/>Recommended reading: http://diego-pacheco.blogspot.com/2023/07/tradeoffs.html
