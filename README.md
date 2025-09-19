@@ -93,15 +93,15 @@ Before you need list all your major decisions, them run tradeoffs on than.
 example:
 Major Decisions: 
 ```
-1. One mobile code base - should be (...)
-2. Reusable capability and low latency backends should be (...)
-3. Cache efficiency therefore should do (...)
+1. Use a relational database to ensure data integrity and support complex queries.
+2. Prioritize extreme performance (~1ms latency) for all database operations.
+3. Choose a fully managed service to ensure high availability and minimize operational overhead.
+4. Optimize for long-term developer productivity and system reliability over absolute lowest cost.
 ```
 Tradeoffs:
 ```
-1. React Native vs (Flutter and Native)
-2. Serverless vs Microservices
-3. Redis vs Enbeded Caches
+1. AWS Aurora PostgreSQL vs. AWS RDS for PostgreSQL
+2. AWS Aurora PostgreSQL vs. Self-Managed PostgreSQL on EC2
 ```
 Each tradeoff line need to be:
 ```
@@ -109,6 +109,25 @@ PROS (+)
   * Benefit: Explanation that justify why the benefit is true.
 CONS (+)
   * Problem: Explanation that justify why the problem is true.
+
+
+1. AWS Aurora PostgreSQL vs. AWS RDS for PostgreSQL
+PROS (+)
+  * Benefit: Superior Performance Architecture. Aurora's cloud-native, decoupled storage layer is specifically engineered for high throughput and low-latency I/O, making the consistent ~1ms performance target achievable. While RDS relies on network-attached EBS storage, which introduces inherent latency. Even the fastest io2 EBS volumes typically have latencies in the low milliseconds, making it extremely difficult to consistently stay under the 1ms threshold, especially for write operations and uncached reads under load.
+CONS (-)
+  * Problem: Higher Financial Cost. Aurora has a more complex and expensive pricing model based on instance size, storage consumption, and I/O operations, leading to a higher monthly bill compared to standard RDS.
+
+2. AWS Aurora PostgreSQL vs. Self-Managed PostgreSQL on EC2
+PROS (+)
+  * Benefit: Reduced Operational Complexity. As a fully managed service, Aurora automates provisioning, patching, backups, and, most critically, high-availability failover, freeing developers from database administration tasks.
+CONS (-)
+  * Problem: Less Granular Control. Choosing Aurora means accepting AWS's managed path, which involves less direct control over underlying OS and database engine tuning compared to a self-managed instance on EC2.
+
+3. AWS Aurora PostgreSQL vs. Apache Cassandra
+PROS (+)
+  * Benefit: Fully Managed by AWS. AWS handles all underlying infrastructure, including provisioning, patching, backups, failure detection, and failover. The management interface is integrated into the AWS console, CLI, and APIs, providing a seamless experience with other AWS services. This drastically reduces the operational burden on your team.
+CONS (-)
+  * Problem: Managed Service Constraints. You trade control for convenience. You have limited access to the underlying OS and cannot fine-tune every low-level database or system parameter. You are also dependent on AWS's timeline for support of new database versions and features.
 ```
 PS: Be careful to not confuse problem with explanation. 
 <BR/>Recommended reading: http://diego-pacheco.blogspot.com/2023/07/tradeoffs.html
