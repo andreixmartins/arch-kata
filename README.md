@@ -168,6 +168,20 @@ For each different kind of data store i.e (Postgres, Memcached, Elasticache, S3,
 
 Describe your stack, what databases would be used, what servers, what kind of components, mobile/ui approach, general architecture components, frameworks and libs to be used or not be used and why.
 
+- Language: Java 23
+- Framework:	Spring Boot 3
+- Container: Docker
+- Orchestration:	Kubernetes
+- API: REST
+- Auth: OAuth2 + JWT
+- Databases: PostgreSQL + Redis
+- Messaging: Kafka
+- CI/CD:	GitHub Actions
+- Monitoring: Prometheus + Grafana
+- Logging: Loki
+- Tracing: Xray
+
+
 ### 🖹 12. References
 
 * Architecture Anti-Patterns: https://architecture-antipatterns.tech/
