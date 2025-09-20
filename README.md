@@ -106,7 +106,7 @@ Tradeoffs:
 3. Redis vs Enbeded Caches
 ```
 Each tradeoff line need to be:
-```
+
 
 Amazon Keyspaces
 PROS (+)
@@ -198,7 +198,7 @@ CONS (−)
   * Costs can escalate quickly with high log ingestion, retention, or custom metrics usage.
   * Limited flexibility and portability—mainly useful for AWS workloads, not multi-cloud or on-premises.
   * Log search and query capabilities (CloudWatch Logs Insights) are less powerful and slower compared to Splunk for complex analytics.
-```
+
 
   * Problem: Managed Service Constraints. You trade control for convenience. You have limited access to the underlying OS and cannot fine-tune every low-level database or system parameter. You are also dependent on AWS's timeline for support of new database versions and features.
 
@@ -229,6 +229,65 @@ CONS (-)
 PS: Be careful to not confuse problem with explanation.
 
 ```
+## Dojo Session
+
+**LiveKit**
+
+**PROS (+)**
+
+- **Compatibility**: Provides built-in signaling, SFU logic, room management, track control, adaptive simulcast, user roles — all abstracted and ready to use with official SDKs for Web, iOS, Android, Flutter, Unity, and more.
+- **Code Reusability**: Offers high-level APIs and pre-built infrastructure, which promotes reuse across different platforms and products.
+- **Scalability**: Designed with cloud-native scaling in mind; Kubernetes-ready with multi-node support and autoscaling.
+- **Setup and Maintenance**: Easy to deploy with prebuilt Docker images and Helm charts. Managed cloud option available (LiveKit Cloud).
+- **Latency**: Low-latency architecture optimized for real-time use cases such as video conferencing, gaming, and virtual collaboration.
+- **Monitoring / Observability**: Offers built-in Prometheus metrics, structured logs, and integration with Grafana dashboards.
+- **Performance**: Includes optimizations like bandwidth adaptation, packet loss recovery, and adaptive streaming (simulcast, SVC).
+- **Availability**: LiveKit Cloud offers high availability out of the box with managed infrastructure and SLAs.
+
+**CONS (-)**
+
+- **Complexity**: Abstracted logic limits low-level control. Custom media routing or deep protocol tweaks are not straightforward.
+- **Cost**: LiveKit Cloud can become expensive at scale compared to self-hosted SFUs like MediaSoup.
+- **Disk Usage Overhead**: Recording or archiving requires external services (like LiveKit Recorder) and adds complexity/cost.
+- **Limitations**: Geared mainly toward standard RTC workflows. Less flexible for exotic use cases or novel media topologies.
+
+**MediaSoup**
+
+**PROS (+)**
+
+- **Complexity / Flexibility**: Offers full control over RTP, SCTP, DTLS, and media pipeline. Ideal for custom or unconventional WebRTC architectures.
+- **Cost**: Fully open-source and self-hosted; no vendor lock-in or usage-based fees.
+- **Latency**: Minimal internal processing makes it highly performant with ultra-low-latency potential.
+- **Performance**: Efficient, lightweight, and highly tunable. Fine-grained control over bandwidth, layers, and routing.
+- **Disk Usage Overhead**: No forced dependency on recorders or file storage — you implement what you need.
+- **Code Reusability**: Node.js and C++ APIs allow tight integration into custom server architectures.
+- **Observability**: Raw metrics and debugging access to RTP internals allow fine performance analysis.
+
+**CONS (-)**
+
+- **Setup and Maintenance**: Requires significant effort to build signaling, room logic, and orchestration from scratch. No built-in user or track management.
+- **Scalability**: No built-in horizontal scaling or cluster awareness — scaling needs manual implementation (e.g., via load balancers or custom SFU routers).
+- **Monitoring**: Lacks integrated dashboards or metrics. Requires custom Prometheus exporters or external tooling.
+- **Compatibility**: Fewer official SDKs and integrations; community-led efforts vary in quality and completeness.
+- **Availability**: You must build your own HA/Failover setup — especially challenging in multi-region environments.
+- **Limitations**: Steep learning curve; requires strong understanding of WebRTC internals and RTP networking.
+
+### Final Recommendation: Use LiveKit
+
+Why?
+
+```
+- You get battle-tested signaling, media routing, SDKs, scaling, and observability out-of-the-box.
+
+- Perfect fit for low-latency 1:1 and small group live coding sessions.
+
+- Lower ops burden for a small or mid-size engineering team.
+
+- You can ship a working MVP in weeks, not months.
+```
+
+
+=======
 
 ## Application Load Balancer (ALB)
 
@@ -312,6 +371,238 @@ What is a majore component? A service, a lambda, a important ui, a generalized a
 6.4 - Algorithms/Data Structures : Spesific algos that need to be used, along size with spesific data structures.
 ```
 
+## Dojo Session
+
+### Class Diagram
+
+```plaintext
++---------------------------------+
+|         RoomService             |
++---------------------------------+
+| - rooms: Map<string, Room>      |
++---------------------------------+
+| + createRoom(name): Room        |
+| + getRoom(name): Room           |
+| + closeRoom(name): void         |
++---------------------------------+
+
+               |
+               ▼
+
++---------------------------------+
+|             Room                |
++---------------------------------+
+| - name: string                  |
+| - participants: Set<Participant>|
+| - tracks: Map<string, Track>    |
++---------------------------------+
+| + addParticipant(p): void       |
+| + removeParticipant(p): void    |
+| + broadcastMessage(msg): void   |
++---------------------------------+
+
+              |
+              ▼
+
++--------------------------------+
+|         Participant            |
++--------------------------------+
+| - id: string                   |
+| - identity: string             |
+| - role: string                 |
+| - tracks: Set<Track>           |
++--------------------------------+
+| + publishTrack(track): void    |
+| + unpublishTrack(track): void  |
+| + sendSignal(msg): void        |
++--------------------------------+
+
+             |
+             ▼
+
++--------------------------------+
+|             Track              |
++--------------------------------+
+| - id: string                   |
+| - kind: 'audio' | 'video'      |
+| - codec: string                |
++--------------------------------+
+| + start(): void                |
+| + stop(): void                 |
++--------------------------------+
+```
+
+---
+
+### Contract Documentation
+
+### **RoomService**
+
+- **createRoom(name: string) → Room**
+  Creates a new room instance.
+
+- **getRoom(name: string) → Room**
+  Retrieves the room by name.
+
+- **closeRoom(name: string) → void**
+  Closes the room and disconnects participants.
+
+---
+
+### **Room**
+
+- **addParticipant(p: Participant) → void**
+  Adds a participant to the room.
+
+- **removeParticipant(p: Participant) → void**
+  Removes a participant from the room.
+
+- **broadcastMessage(msg: SignalMessage) → void**
+  Sends a signal to all participants.
+
+---
+
+### **Participant**
+
+- **publishTrack(track: Track) → void**
+  Publishes a media track to the room.
+
+- **unpublishTrack(track: Track) → void**
+  Stops publishing a track.
+
+- **sendSignal(msg: SignalMessage) → void**
+  Sends a signaling message to server or other participants.
+
+---
+
+### Persistence Model
+
+### **Diagrams / Table Structures**
+
+```plaintext
+Table: rooms
+- id (PK)
+- name
+- created_at
+- is_active
+
+Table: participants
+- id (PK)
+- room_id (FK -> rooms.id)
+- identity
+- role
+- joined_at
+- is_connected
+
+Table: tracks
+- id (PK)
+- participant_id (FK -> participants.id)
+- kind
+- codec
+- created_at
+```
+
+### **Partitioning Strategy**
+
+- **Rooms**: Could be partitioned by `region` or `tenant_id` if multi-tenant.
+- **Participants**: Partition by `room_id` for faster lookup.
+- **Tracks**: Co-located with participants for better locality.
+
+### **Main Queries**
+
+1. Fetch all participants in a room:
+
+   ```sql
+   SELECT * FROM participants WHERE room_id = :room_id;
+   ```
+
+2. Get active rooms:
+
+   ```sql
+   SELECT * FROM rooms WHERE is_active = true;
+   ```
+
+3. Get tracks by participant:
+
+   ```sql
+   SELECT * FROM tracks WHERE participant_id = :participant_id;
+   ```
+
+---
+
+### Algorithms / Data Structures
+
+### **Data Structures**
+
+- `Map<String, Room>` for room lookup
+- `Set<Participant>` in a Room for O(1) joins/leaves
+- `Map<String, Track>` in Participant for quick access
+- `MessageQueue` (Pub/Sub) for signaling layer (if custom signaling is used)
+
+### **Algorithms**
+
+- **Auto-room cleanup**:
+  When the last participant leaves, schedule a timeout job to close the room (debounced).
+
+- **Adaptive bitrate selection**:
+  Based on packet loss / RTT metrics — adjust simulcast layer dynamically
+
+- **Track Routing Algorithm** (in SFU layer):
+
+  - Inputs: subscriber bandwidth, CPU load
+  - Output: optimal video quality layer
+  - Could use a simple scoring model per subscriber:
+
+    ```python
+    score = available_bandwidth / number_of_tracks
+    ```
+
+- **Participant Sorting**:
+  Sort active speakers by loudness score or priority for layout/rendering:
+
+  ```python
+  sorted(participants, key=lambda p: p.audio_level, reverse=True)
+  ```
+  
+  ### Contract Documentation
+
+- RoomService
+
+  - createRoom(name: string) → Room
+    Creates a new room instance.
+
+  - getRoom(name: string) → Room
+    Retrieves the room by name.
+
+  - closeRoom(name: string) → void
+    Closes the room and disconnects participants.
+
+- Room
+
+  - addParticipant(p: Participant) → void
+    Adds a participant to the room.
+
+  - removeParticipant(p: Participant) → void
+    Removes a participant from the room.
+
+  - broadcastMessage(msg: SignalMessage) → void
+    Sends a signal to all participants.
+
+- Participant
+
+  - publishTrack(track: Track) → void
+    Publishes a media track to the room.
+
+  - unpublishTrack(track: Track) → void
+    Stops publishing a track.
+
+  - sendSignal(msg: SignalMessage) → void
+    Sends a signaling message to server or other participants.
+
+---
+
+Exemplos of other components: Batch jobs, Events, 3rd Party Integrations, Streaming, ML Models, ChatBots, etc... 
+=======
 ## Report Service
 ### 6.1 - Report Service Class Diagram
 here go the image
