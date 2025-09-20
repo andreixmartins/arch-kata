@@ -38,8 +38,8 @@ KATA Arch Topics
 ## Groups
 Tairone / Mateus
 - Network
-- Load Balancers
-- Observability
+- Load Balancers - Tairone
+- Observability - Mateus
 
 Victor / Marlon / Fabio
 - Databases

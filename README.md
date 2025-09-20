@@ -8,7 +8,7 @@
 What is the problem? What is the context of the problem?
 Example:
 ```
-MR Bill, wants a system to keep track of his favorite pocs, so you need to build a mobile app where mr Bill can register all his pocs, and also  
+MR Bill, wants a system to keep track of his favorite pocs, so you need to build a mobile app where mr Bill can register all his pocs, and also
 he needs to be able to search pocs, by name, by language,m by tags.
 This system should be multi-tenant because mr bill will sell such system to.
 Bunch of people in brazil, such system must have also ability to generate repots and generate a video with the all pocs
@@ -34,14 +34,14 @@ Example:
 ```
 1. Solution needs to be fast! Performance for all operations bellow ~1 ms.
 2. Security is non-negociable! Security at-rest, transite, threat analysis and review for by at least 3 different people.
-3. Mobile-native: We want a native app using Swift and Kotlin 
+3. Mobile-native: We want a native app using Swift and Kotlin
 4. Cloud-Native: All backend must be 100% cloud native, using AWS Cloud services
 5. Microservices: Do not use AWS Lambdas
 6. Cache: AWS Elastic Cache to cache user data information
 7. Tests: Employ unit tests, integration tests, regression tests, chaos tests
 8. Microservices: App services must use the microservice architecture
 9. Amazon OpenSearch: Realtime application monitoring and security Analytics
-10. Amazon RDS: Postgres for relational data 
+10. Amazon RDS: Postgres for relational data
 ```
 Recommended Learning: http://diego-pacheco.blogspot.com/2020/05/education-vs-learning.html
 
@@ -81,8 +81,8 @@ Recommended Reading: http://diego-pacheco.blogspot.com/2018/01/stability-princip
 Here there will be a bunch of diagrams, to understand the solution.
 ```
 🗂️ 4.1 Overall architecture: Show the big picture, relationship between macro components.
-🗂️ 4.2 Deployment: Show the infra in a big picture. 
-🗂️ 4.3 Use Cases: Make 1 macro use case diagram that list the main capability that needs to be covered. 
+🗂️ 4.2 Deployment: Show the infra in a big picture.
+🗂️ 4.3 Use Cases: Make 1 macro use case diagram that list the main capability that needs to be covered.
 ```
 Recommended Reading: http://diego-pacheco.blogspot.com/2020/10/uml-hidden-gems.html
 
@@ -91,7 +91,7 @@ Recommended Reading: http://diego-pacheco.blogspot.com/2020/10/uml-hidden-gems.h
 List the tradeoffs analysis, comparing pros and cons for each major decision.
 Before you need list all your major decisions, them run tradeoffs on than.
 example:
-Major Decisions: 
+Major Decisions:
 ```
 1. One mobile code base - should be (...)
 2. Reusable capability and low latency backends should be (...)
@@ -107,67 +107,103 @@ Tradeoffs:
 ```
 Each tradeoff line need to be:
 ```
-PROS (+) 
-  * Benefit: Explanation that justify why the benefit is true.
-CONS (+)
-  * Problem: Explanation that justify why the problem is true.
 
 Amazon Keyspaces
 PROS (+)
-  * Benefit: Multi-Tenant Isolation - Native partition-based isolation ensures complete tenant data separation without complex application logic.
-  * Benefit: Auto-Scaling - Seamlessly handles variable workloads across tenants without manual intervention or capacity planning.
-  * Benefit: Zero Maintenance - Fully managed service eliminates patching, backups, and cluster management overhead.
-  * Benefit: High Availability - Built-in multi-AZ replication with automatic failover provides 99.99% availability SLA.
-  * Benefit: Cost Efficiency - Pay-per-request pricing model scales cost with actual usage, ideal for multi-tenant SaaS applications.
+  * Multi-Tenant Isolation - Native partition-based isolation ensures complete tenant data separation without complex application logic.
+  * Auto-Scaling - Seamlessly handles variable workloads across tenants without manual intervention or capacity planning.
+  * Zero Maintenance - Fully managed service eliminates patching, backups, and cluster management overhead.
+  * High Availability - Built-in multi-AZ replication with automatic failover provides 99.99% availability SLA.
+  * Cost Efficiency - Pay-per-request pricing model scales cost with actual usage, ideal for multi-tenant SaaS applications.
 CONS (-)
-  * Problem: Query Limitations - No support for complex joins or aggregations limits analytical capabilities for reporting features.
-  * Problem: Eventual Consistency - Default eventual consistency may cause temporary data inconsistencies in real-time scenarios.
-  * Problem: Vendor Lock-in - AWS-specific service creates dependency on AWS ecosystem and CQL dialect.
-  * Problem: Cold Start Latency - Initial queries after idle periods may experience higher latency due to distributed nature.
-  * Problem: Limited Indexing - Secondary indexes have performance implications and query restrictions compared to relational databases.
+  * Query Limitations - No support for complex joins or aggregations limits analytical capabilities for reporting features.
+  * Eventual Consistency - Default eventual consistency may cause temporary data inconsistencies in real-time scenarios.
+  * Vendor Lock-in - AWS-specific service creates dependency on AWS ecosystem and CQL dialect.
+  * Cold Start Latency - Initial queries after idle periods may experience higher latency due to distributed nature.
+  * Limited Indexing - Secondary indexes have performance implications and query restrictions compared to relational databases.
 
 AWS RDS Aurora
 PROS (+)
-  * Benefit: ACID Compliance - Full transactional consistency ensures data integrity for critical business operations and financial transactions.
-  * Benefit: SQL Compatibility - Complete PostgreSQL compatibility enables complex queries, joins, and existing application migration.
-  * Benefit: Performance - Sub-millisecond read latencies with read replicas support high-throughput analytical workloads.
-  * Benefit: Advanced Features - Supports stored procedures, triggers, and advanced SQL features for complex business logic.
-  * Benefit: Monitoring - Performance Insights provides detailed query-level monitoring and optimization recommendations.
+  * ACID Compliance - Full transactional consistency ensures data integrity for critical business operations and financial transactions.
+  * Compatibility - Complete PostgreSQL compatibility enables complex queries, joins, and existing application migration.
+  * Performance - Sub-millisecond read latencies with read replicas support high-throughput analytical workloads.
+  * Advanced Features - Supports stored procedures, triggers, and advanced SQL features for complex business logic.
+  * Monitoring - Performance Insights provides detailed query-level monitoring and optimization recommendations.
 CONS (-)
-  * Problem: Operational Complexity - Requires instance sizing, connection pooling, and performance tuning expertise.
-  * Problem: Multi-Tenant Challenges - Requires application-level tenant isolation and careful schema design to prevent data leakage.
-  * Problem: Scaling Limitations - Vertical scaling has limits; horizontal scaling requires read replicas and application changes.
-  * Problem: Cost Predictability - Fixed instance costs regardless of usage patterns may be expensive for variable workloads.
-  * Problem: Maintenance Windows - Requires planned downtime for patches and major version upgrades.
+  * Operational Complexity - Requires instance sizing, connection pooling, and performance tuning expertise.
+  * Multi-Tenant Challenges - Requires application-level tenant isolation and careful schema design to prevent data leakage.
+  * Scaling Limitations - Vertical scaling has limits; horizontal scaling requires read replicas and application changes.
+  * Cost Predictability - Fixed instance costs regardless of usage patterns may be expensive for variable workloads.
+  * Maintenance Windows - Requires planned downtime for patches and major version upgrades.
 
 AWS RDS for PostgreSQL
 PROS (+)
-  * Benefit: Mature Ecosystem - Extensive PostgreSQL ecosystem with proven libraries, tools, and community support.
-  * Benefit: Rich Data Types - Native support for JSON, arrays, and custom types enables flexible data modeling.
-  * Benefit: Full SQL Support - Complete SQL standard compliance with advanced features like window functions and CTEs.
+  * Mature Ecosystem - Extensive PostgreSQL ecosystem with proven libraries, tools, and community support.
+  * Rich Data Types - Native support for JSON, arrays, and custom types enables flexible data modeling.
+  * Full SQL Support - Complete SQL standard compliance with advanced features like window functions and CTEs.
   * Benefit: Backup & Recovery - Automated backups with point-in-time recovery provide robust data protection.
-  * Benefit: Security Features - Row-level security and advanced authentication options support complex multi-tenant security models.
+  * Security Features - Row-level security and advanced authentication options support complex multi-tenant security models.
 CONS (-)
-  * Problem: Manual Scaling - Requires manual intervention for scaling up/down and lacks automatic capacity adjustment.
-  * Problem: Single Point of Failure - Standard RDS has potential downtime during failover events in Multi-AZ deployments.
-  * Problem: Resource Contention - Shared resources between tenants can lead to noisy neighbor problems affecting performance.
-  * Problem: Storage Limitations - EBS storage has IOPS limits that may constrain high-throughput applications.
-  * Problem: Maintenance Overhead - Requires regular maintenance, parameter tuning, and performance monitoring.
+  * Manual Scaling - Requires manual intervention for scaling up/down and lacks automatic capacity adjustment.
+  * Single Point of Failure - Standard RDS has potential downtime during failover events in Multi-AZ deployments.
+  * Resource Contention - Shared resources between tenants can lead to noisy neighbor problems affecting performance.
+  * Storage Limitations - EBS storage has IOPS limits that may constrain high-throughput applications.
+  * Maintenance Overhead - Requires regular maintenance, parameter tuning, and performance monitoring.
 
 S3 (Amazon Simple Storage Service)
 PROS (+)
-  * Benefit: Scalability - Highly scalable, can handle vast amounts of data.
-  * Benefit: Low maintainability - Managed service by AWS, reducing the need for in-house maintenance.
-  * Benefit: Integration - Seamlessly integrates with other AWS services.
-  * Benefit: Global Availability - Data can be accessed from anywhere in the world with low latency.
-  * Benefit: Cost-Effective - Pay-as-you-go pricing model, which can be economical for many use cases.
+  * Scalability - Highly scalable, can handle vast amounts of data.
+  * Low maintainability - Managed service by AWS, reducing the need for in-house maintenance.
+  * Integration - Seamlessly integrates with other AWS services.
+  * Global Availability - Data can be accessed from anywhere in the world with low latency.
+  * Cost-Effective - Pay-as-you-go pricing model, which can be economical for many use cases.
 
 CONS (-)
-  * Problem: Cost - Can become expensive with high data retrieval and transfer rates.
-  * Problem: Vendor Lock-in - Ties you to the AWS ecosystem, making migration to other platforms challenging.
-  * Problem: Limited Customization - Less flexibility in terms of configuration and customization compared to self-managed solutions.
-  * Problem: Latency - May have higher latency for certain applications compared to local storage solutions.
-  * Problem: Data Transfer Costs - Charges for data transfer out of S3 can add up, especially for high-traffic applications.
+  * Cost - Can become expensive with high data retrieval and transfer rates.
+  * Vendor Lock-in - Ties you to the AWS ecosystem, making migration to other platforms challenging.
+  * Limited Customization - Less flexibility in terms of configuration and customization compared to self-managed solutions.
+  * Latency - May have higher latency for certain applications compared to local storage solutions.
+  * Data Transfer Costs - Charges for data transfer out of S3 can add up, especially for high-traffic applications.
+
+4. Splunk vs Loki vs CloudWatch
+Splunk
+PROS (+)
+  * Provides advanced analytics and full-text search capabilities through SPL (Search Processing Language), which makes it ideal for complex queries and security/compliance use cases.
+  * Flexible deployment options (on-premises, hybrid, or cloud), giving organizations control over their infrastructure strategy.
+  * Mature ecosystem with dashboards, alerting, and SIEM(Security Information and Event Management) features that cover enterprise needs out of the box.
+
+CONS (−)
+  * Licensing and data ingestion/storage costs scale steeply, making Splunk very expensive at high log volumes.
+  * Requires significant operational overhead for scaling and managing indexes, even in Splunk Cloud environments.
+  * Vendor lock-in due to proprietary ecosystem and pricing model.
+
+Grafana Loki
+PROS (+)
+  * Benefit: Open-source and cost-efficient because only metadata (labels + timestamp) is indexed, reducing storage and compute costs.
+  * Benefit: Integrates seamlessly with Grafana, Prometheus, and Kubernetes, making it a natural fit for cloud-native observability stacks.
+  * Benefit: Scales horizontally and is well-suited for high-volume logs with structured labels.
+
+CONS (−)
+  * Weaker full-text search compared to Splunk, since only metadata is indexed.
+  * Requires self-hosting or managed services, which introduces infrastructure and operational overhead.
+  * Lacks some enterprise-grade features (security/compliance, SIEM(Security Information and Event Management)) without additional tooling.
+
+Amazon CloudWatch
+PROS (+)
+  * Fully managed service with minimal operational overhead, tightly integrated with AWS ecosystem (EC2, Lambda, RDS, etc.).
+  * Pay-as-you-go pricing model with a free tier, making it easy to adopt and scale within AWS.
+  * Provides unified metrics, logs, alarms, and dashboards in one platform, reducing integration complexity.
+
+CONS (−)
+  * Costs can escalate quickly with high log ingestion, retention, or custom metrics usage.
+  * Limited flexibility and portability—mainly useful for AWS workloads, not multi-cloud or on-premises.
+  * Log search and query capabilities (CloudWatch Logs Insights) are less powerful and slower compared to Splunk for complex analytics.
+```
+
+  * Problem: Managed Service Constraints. You trade control for convenience. You have limited access to the underlying OS and cannot fine-tune every low-level database or system parameter. You are also dependent on AWS's timeline for support of new database versions and features.
+
+PS: Be careful to not confuse problem with explanation.
+=======
 
 ```
 
@@ -239,6 +275,7 @@ CONS (-)
 
 
 PS: Be careful to not confuse problem with explanation. 
+
 <BR/>Recommended reading: http://diego-pacheco.blogspot.com/2023/07/tradeoffs.html
 
 ### 🌏 6. For each key major component
@@ -251,7 +288,7 @@ What is a majore component? A service, a lambda, a important ui, a generalized a
 6.4 - Algorithms/Data Structures : Spesific algos that need to be used, along size with spesific data structures.
 ```
 
-Exemplos of other components: Batch jobs, Events, 3rd Party Integrations, Streaming, ML Models, ChatBots, etc... 
+Exemplos of other components: Batch jobs, Events, 3rd Party Integrations, Streaming, ML Models, ChatBots, etc...
 
 Recommended Reading: http://diego-pacheco.blogspot.com/2018/05/internal-system-design-forgotten.html
 
