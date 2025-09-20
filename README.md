@@ -112,48 +112,48 @@ PROS (+)
 CONS (+)
   * Problem: Explanation that justify why the problem is true.
 
-1. Amazon Keyspaces vs. AWS RDS Aurora (PostgreSQL-Compatible)
+Amazon Keyspaces
 PROS (+)
-- Complexity: Keyspaces is fully serverless, no instance sizing or cluster design. Aurora requires careful sizing of compute and storage.
-- Scalability: Keyspaces auto-scales throughput and storage; Aurora requires manual scaling or Aurora Serverless v2 (with limitations).
-- Availability: Keyspaces handles multi-AZ replication automatically, while Aurora requires managing failover events.
-- Cost: Pay-per-request pricing in Keyspaces is cost-efficient for spiky workloads; Aurora incurs continuous instance charges.
-- Setup & Maintenance: Keyspaces has zero maintenance overhead; Aurora requires DB parameter tuning and I/O optimization.
-CONS (–)
-- Performance: Aurora excels for real-time transactional workloads with strong consistency; Keyspaces is optimized for partition-based, high-volume workloads like time-series or IoT.
-- Limitations: Keyspaces does not support joins, triggers, or advanced SQL features; Aurora supports full relational SQL.
-- Latency: Aurora can provide sub-millisecond local reads; Keyspaces has higher network-based latencies.
-- Disk Usage Overhead: Aurora’s storage layer is efficient; Keyspaces stores data redundantly across zones, potentially increasing storage costs.
-- Observability / Monitoring: Aurora integrates with Performance Insights; Keyspaces relies on CloudWatch metrics with less granularity.
+  * Benefit: Multi-Tenant Isolation - Native partition-based isolation ensures complete tenant data separation without complex application logic.
+  * Benefit: Auto-Scaling - Seamlessly handles variable workloads across tenants without manual intervention or capacity planning.
+  * Benefit: Zero Maintenance - Fully managed service eliminates patching, backups, and cluster management overhead.
+  * Benefit: High Availability - Built-in multi-AZ replication with automatic failover provides 99.99% availability SLA.
+  * Benefit: Cost Efficiency - Pay-per-request pricing model scales cost with actual usage, ideal for multi-tenant SaaS applications.
+CONS (-)
+  * Problem: Query Limitations - No support for complex joins or aggregations limits analytical capabilities for reporting features.
+  * Problem: Eventual Consistency - Default eventual consistency may cause temporary data inconsistencies in real-time scenarios.
+  * Problem: Vendor Lock-in - AWS-specific service creates dependency on AWS ecosystem and CQL dialect.
+  * Problem: Cold Start Latency - Initial queries after idle periods may experience higher latency due to distributed nature.
+  * Problem: Limited Indexing - Secondary indexes have performance implications and query restrictions compared to relational databases.
 
-2. Amazon Keyspaces vs. AWS RDS for PostgreSQL
+AWS RDS Aurora
 PROS (+)
-- Complexity: Keyspaces eliminates all infrastructure decisions; RDS requires provisioning instances, storage, and replication.
-- Scalability: Keyspaces scales seamlessly with workload; RDS scaling is tied to instance classes and storage resizing.
-- Availability: Keyspaces automatically replicates across multiple AZs; RDS uses Multi-AZ failover with 60–120s downtime.
-- Setup & Maintenance: Keyspaces has no patching or backups; RDS still requires operational planning.
-- Cost: Pay-per-use pricing benefits variable workloads; RDS pricing is predictable for steady workloads.
-CONS (–)
-- Performance: RDS is optimized for real-time transactional workloads with strong ACID compliance; Keyspaces provides tunable consistency but not full ACID.
-- Limitations: Keyspaces does not support relational queries, foreign keys, or complex joins; RDS supports full SQL and PL/pgSQL.
-- Latency: Keyspaces latencies are typically higher than RDS for single-row transactional lookups.
-- Disk Usage Overhead: RDS lets you control EBS volume type; Keyspaces abstracts storage, potentially increasing costs at scale.
-- Observability / Monitoring: RDS integrates with CloudWatch, Enhanced Monitoring, and Performance Insights; Keyspaces only provides CloudWatch metrics with limited query profiling.
+  * Benefit: ACID Compliance - Full transactional consistency ensures data integrity for critical business operations and financial transactions.
+  * Benefit: SQL Compatibility - Complete PostgreSQL compatibility enables complex queries, joins, and existing application migration.
+  * Benefit: Performance - Sub-millisecond read latencies with read replicas support high-throughput analytical workloads.
+  * Benefit: Advanced Features - Supports stored procedures, triggers, and advanced SQL features for complex business logic.
+  * Benefit: Monitoring - Performance Insights provides detailed query-level monitoring and optimization recommendations.
+CONS (-)
+  * Problem: Operational Complexity - Requires instance sizing, connection pooling, and performance tuning expertise.
+  * Problem: Multi-Tenant Challenges - Requires application-level tenant isolation and careful schema design to prevent data leakage.
+  * Problem: Scaling Limitations - Vertical scaling has limits; horizontal scaling requires read replicas and application changes.
+  * Problem: Cost Predictability - Fixed instance costs regardless of usage patterns may be expensive for variable workloads.
+  * Problem: Maintenance Windows - Requires planned downtime for patches and major version upgrades.
 
-3. Amazon Keyspaces vs. Apache Cassandra (Self-Managed on AWS)
+AWS RDS for PostgreSQL
 PROS (+)
-- Complexity: Keyspaces removes all cluster design, node scaling, and replication management; Cassandra requires expertise to configure ring topology.
-- Scalability: Keyspaces scales automatically; Cassandra scaling requires manual node provisioning and balancing.
-- Availability: Keyspaces ensures multi-AZ fault tolerance by default; Cassandra requires manual replication factor setup.
-- Performance: Keyspaces delivers predictable performance without compaction overhead; Cassandra can suffer from write amplification and compaction stalls.
-- Cost: Keyspaces avoids EC2/EBS and admin costs; Cassandra adds infra plus significant operational costs.
-- Setup & Maintenance: Keyspaces is zero-maintenance; Cassandra requires ops for backups, patches, upgrades, and monitoring.
-- Latency: Keyspaces provides consistent regional latency; Cassandra may give lower latency only with carefully tuned local clusters.
-- Observability / Monitoring: Keyspaces integrates with CloudWatch automatically; Cassandra requires deploying and managing monitoring tools.
-CONS (–)
-- Limitations: Keyspaces has fewer tunables; Cassandra allows deep control over consistency, partitioning, compaction, and caching strategies.
-- Disk Usage Overhead: Cassandra allows storage-level tuning; Keyspaces abstracts storage, potentially increasing costs for large datasets.
-- Vendor Lock-in: Keyspaces ties you to AWS; Cassandra runs on any cloud or on-prem.
+  * Benefit: Mature Ecosystem - Extensive PostgreSQL ecosystem with proven libraries, tools, and community support.
+  * Benefit: Rich Data Types - Native support for JSON, arrays, and custom types enables flexible data modeling.
+  * Benefit: Full SQL Support - Complete SQL standard compliance with advanced features like window functions and CTEs.
+  * Benefit: Backup & Recovery - Automated backups with point-in-time recovery provide robust data protection.
+  * Benefit: Security Features - Row-level security and advanced authentication options support complex multi-tenant security models.
+CONS (-)
+  * Problem: Manual Scaling - Requires manual intervention for scaling up/down and lacks automatic capacity adjustment.
+  * Problem: Single Point of Failure - Standard RDS has potential downtime during failover events in Multi-AZ deployments.
+  * Problem: Resource Contention - Shared resources between tenants can lead to noisy neighbor problems affecting performance.
+  * Problem: Storage Limitations - EBS storage has IOPS limits that may constrain high-throughput applications.
+  * Problem: Maintenance Overhead - Requires regular maintenance, parameter tuning, and performance monitoring.
+
 
 ```
 PS: Be careful to not confuse problem with explanation. 
