@@ -141,7 +141,7 @@ PROS (+)
   * Mature Ecosystem - Extensive PostgreSQL ecosystem with proven libraries, tools, and community support.
   * Rich Data Types - Native support for JSON, arrays, and custom types enables flexible data modeling.
   * Full SQL Support - Complete SQL standard compliance with advanced features like window functions and CTEs.
-  * Benefit: Backup & Recovery - Automated backups with point-in-time recovery provide robust data protection.
+  * Backup & Recovery - Automated backups with point-in-time recovery provide robust data protection.
   * Security Features - Row-level security and advanced authentication options support complex multi-tenant security models.
 CONS (-)
   * Manual Scaling - Requires manual intervention for scaling up/down and lacks automatic capacity adjustment.
@@ -202,8 +202,31 @@ CONS (−)
 
   * Problem: Managed Service Constraints. You trade control for convenience. You have limited access to the underlying OS and cannot fine-tune every low-level database or system parameter. You are also dependent on AWS's timeline for support of new database versions and features.
 
+
+5. Network
+AWS EKS
+PROS (+)
+  *  Managed Kubernetes reduces operational burden by handling control plane provisioning, scaling, patching, and upgrades automatically. Integrates natively with AWS networking, security, and monitoring services.
+
+CONS (-)
+  * Problem: Extra cost for control plane and managed services; networking setup (CNI, service mesh) can be complex, especially for multi-AZ or hybrid deployments.
+
+AWS API GATEWAY
+PROS (+)
+  * Provides a fully managed API layer with built-in authentication, throttling, caching, and monitoring, automatically handling high request volumes without infrastructure scaling.
+
+CONS (-)
+  * Adds network latency (~10–50ms per request), which may impact ultra-low-latency requirements; pricing can grow with traffic; limited low-level network control.
+
+MULTI TENANT ARCHITECTURE
+PROS (+)
+  * Enables logical isolation of tenants, reducing operational cost by sharing infrastructure while maintaining security. Centralized network policies and monitoring simplify management.
+
+CONS (-)
+  * Problem: Implementing strict isolation and traffic policies is complex; misconfigurations can lead to data leakage; scaling to many tenants may require careful IP and cluster planning.
+
+```
 PS: Be careful to not confuse problem with explanation.
-=======
 
 ```
 
@@ -276,6 +299,7 @@ PS: Be careful to not confuse problem with explanation.
 
 PS: Be careful to not confuse problem with explanation. 
 
+
 <BR/>Recommended reading: http://diego-pacheco.blogspot.com/2023/07/tradeoffs.html
 
 ### 🌏 6. For each key major component
@@ -287,6 +311,62 @@ What is a majore component? A service, a lambda, a important ui, a generalized a
 6.3 - Persistence Model          : Diagrams, Table structure, partiotioning, main queries.
 6.4 - Algorithms/Data Structures : Spesific algos that need to be used, along size with spesific data structures.
 ```
+
+## Report Service
+### 6.1 - Report Service Class Diagram
+here go the image
+
+### 6.2 - Report Service Contract Documentation
+- ReportService
+  * createReport(params: Map) → Input: params (filters, type, user) → Output: Report
+  * getReportById(id: UUID) → Input: report ID → Output: Report
+  * listReports() → Input: none → Output: List of Reports
+
+- ReportGenerator
+  * generate(data: Any, format: Format) → Input: raw data, desired format → Output: Report
+
+- ReportFormatter
+  * formatAsPDF(report: Report) → Input: Report → Output: PDF File
+  * formatAsCSV(report: Report) → Input: Report → Output: CSV File
+  * formatAsHTML(report: Report) → Input: Report → Output: HTML File
+
+- ReportRepository
+  * save(report: Report) → Input: Report → Output: void
+  * findById(id: UUID) → Input: report ID → Output: Report
+  * findAll() → Input: none → Output: List of Reports
+
+- User
+  * requestReport(params: Map) → Input: parameters → Output: Report
+
+### 6.3 - Report Service Persistence Model
+here go the image
+
+Main Queries
+Insert:
+  * INSERT INTO reports (id, title, content, created_at) VALUES (?, ?, ?, ?)
+
+Find by ID:
+  * SELECT * FROM reports WHERE id = ?
+
+List All:
+  * SELECT * FROM reports ORDER BY created_at DESC
+
+### 6.4 - Report Service Algorithms / Data Structures
+Algorithms
+  * Formatting:
+    * PDF generation: simple template-based rendering (e.g., iText or jsPDF).
+    * CSV: string serialization with delimiter.
+    * HTML: lightweight template rendering.
+
+  * Search & Retrieval:
+    * basic indexed lookups by id and created_at.
+
+Data Structures
+  * Map: for dynamic params when creating reports.
+  * List: to store multiple reports in memory when listing.
+  * UUID: unique identifier for Report and User.
+  * DateTime: for timestamps.
+
 
 Exemplos of other components: Batch jobs, Events, 3rd Party Integrations, Streaming, ML Models, ChatBots, etc...
 
