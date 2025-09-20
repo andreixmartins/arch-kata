@@ -154,6 +154,20 @@ CONS (-)
   * Problem: Storage Limitations - EBS storage has IOPS limits that may constrain high-throughput applications.
   * Problem: Maintenance Overhead - Requires regular maintenance, parameter tuning, and performance monitoring.
 
+S3 (Amazon Simple Storage Service)
+PROS (+)
+  * Benefit: Scalability - Highly scalable, can handle vast amounts of data.
+  * Benefit: Low maintainability - Managed service by AWS, reducing the need for in-house maintenance.
+  * Benefit: Integration - Seamlessly integrates with other AWS services.
+  * Benefit: Global Availability - Data can be accessed from anywhere in the world with low latency.
+  * Benefit: Cost-Effective - Pay-as-you-go pricing model, which can be economical for many use cases.
+
+CONS (-)
+  * Problem: Cost - Can become expensive with high data retrieval and transfer rates.
+  * Problem: Vendor Lock-in - Ties you to the AWS ecosystem, making migration to other platforms challenging.
+  * Problem: Limited Customization - Less flexibility in terms of configuration and customization compared to self-managed solutions.
+  * Problem: Latency - May have higher latency for certain applications compared to local storage solutions.
+  * Problem: Data Transfer Costs - Charges for data transfer out of S3 can add up, especially for high-traffic applications.
 
 ```
 PS: Be careful to not confuse problem with explanation. 
