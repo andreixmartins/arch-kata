@@ -112,24 +112,49 @@ PROS (+)
 CONS (+)
   * Problem: Explanation that justify why the problem is true.
 
-
-1. AWS Aurora PostgreSQL vs. AWS RDS for PostgreSQL
+Amazon Keyspaces
 PROS (+)
-  * Benefit: Superior Performance Architecture. Aurora's cloud-native, decoupled storage layer is specifically engineered for high throughput and low-latency I/O, making the consistent ~1ms performance target achievable. While RDS relies on network-attached EBS storage, which introduces inherent latency. Even the fastest io2 EBS volumes typically have latencies in the low milliseconds, making it extremely difficult to consistently stay under the 1ms threshold, especially for write operations and uncached reads under load.
+  * Benefit: Multi-Tenant Isolation - Native partition-based isolation ensures complete tenant data separation without complex application logic.
+  * Benefit: Auto-Scaling - Seamlessly handles variable workloads across tenants without manual intervention or capacity planning.
+  * Benefit: Zero Maintenance - Fully managed service eliminates patching, backups, and cluster management overhead.
+  * Benefit: High Availability - Built-in multi-AZ replication with automatic failover provides 99.99% availability SLA.
+  * Benefit: Cost Efficiency - Pay-per-request pricing model scales cost with actual usage, ideal for multi-tenant SaaS applications.
 CONS (-)
-  * Problem: Higher Financial Cost. Aurora has a more complex and expensive pricing model based on instance size, storage consumption, and I/O operations, leading to a higher monthly bill compared to standard RDS.
+  * Problem: Query Limitations - No support for complex joins or aggregations limits analytical capabilities for reporting features.
+  * Problem: Eventual Consistency - Default eventual consistency may cause temporary data inconsistencies in real-time scenarios.
+  * Problem: Vendor Lock-in - AWS-specific service creates dependency on AWS ecosystem and CQL dialect.
+  * Problem: Cold Start Latency - Initial queries after idle periods may experience higher latency due to distributed nature.
+  * Problem: Limited Indexing - Secondary indexes have performance implications and query restrictions compared to relational databases.
 
-2. AWS Aurora PostgreSQL vs. Self-Managed PostgreSQL on EC2
+AWS RDS Aurora
 PROS (+)
-  * Benefit: Reduced Operational Complexity. As a fully managed service, Aurora automates provisioning, patching, backups, and, most critically, high-availability failover, freeing developers from database administration tasks.
+  * Benefit: ACID Compliance - Full transactional consistency ensures data integrity for critical business operations and financial transactions.
+  * Benefit: SQL Compatibility - Complete PostgreSQL compatibility enables complex queries, joins, and existing application migration.
+  * Benefit: Performance - Sub-millisecond read latencies with read replicas support high-throughput analytical workloads.
+  * Benefit: Advanced Features - Supports stored procedures, triggers, and advanced SQL features for complex business logic.
+  * Benefit: Monitoring - Performance Insights provides detailed query-level monitoring and optimization recommendations.
 CONS (-)
-  * Problem: Less Granular Control. Choosing Aurora means accepting AWS's managed path, which involves less direct control over underlying OS and database engine tuning compared to a self-managed instance on EC2.
+  * Problem: Operational Complexity - Requires instance sizing, connection pooling, and performance tuning expertise.
+  * Problem: Multi-Tenant Challenges - Requires application-level tenant isolation and careful schema design to prevent data leakage.
+  * Problem: Scaling Limitations - Vertical scaling has limits; horizontal scaling requires read replicas and application changes.
+  * Problem: Cost Predictability - Fixed instance costs regardless of usage patterns may be expensive for variable workloads.
+  * Problem: Maintenance Windows - Requires planned downtime for patches and major version upgrades.
 
-3. AWS Aurora PostgreSQL vs. Apache Cassandra
+AWS RDS for PostgreSQL
 PROS (+)
-  * Benefit: Fully Managed by AWS. AWS handles all underlying infrastructure, including provisioning, patching, backups, failure detection, and failover. The management interface is integrated into the AWS console, CLI, and APIs, providing a seamless experience with other AWS services. This drastically reduces the operational burden on your team.
+  * Benefit: Mature Ecosystem - Extensive PostgreSQL ecosystem with proven libraries, tools, and community support.
+  * Benefit: Rich Data Types - Native support for JSON, arrays, and custom types enables flexible data modeling.
+  * Benefit: Full SQL Support - Complete SQL standard compliance with advanced features like window functions and CTEs.
+  * Benefit: Backup & Recovery - Automated backups with point-in-time recovery provide robust data protection.
+  * Benefit: Security Features - Row-level security and advanced authentication options support complex multi-tenant security models.
 CONS (-)
-  * Problem: Managed Service Constraints. You trade control for convenience. You have limited access to the underlying OS and cannot fine-tune every low-level database or system parameter. You are also dependent on AWS's timeline for support of new database versions and features.
+  * Problem: Manual Scaling - Requires manual intervention for scaling up/down and lacks automatic capacity adjustment.
+  * Problem: Single Point of Failure - Standard RDS has potential downtime during failover events in Multi-AZ deployments.
+  * Problem: Resource Contention - Shared resources between tenants can lead to noisy neighbor problems affecting performance.
+  * Problem: Storage Limitations - EBS storage has IOPS limits that may constrain high-throughput applications.
+  * Problem: Maintenance Overhead - Requires regular maintenance, parameter tuning, and performance monitoring.
+
+
 ```
 PS: Be careful to not confuse problem with explanation. 
 <BR/>Recommended reading: http://diego-pacheco.blogspot.com/2023/07/tradeoffs.html
