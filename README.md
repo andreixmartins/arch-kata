@@ -101,9 +101,13 @@ Major Decisions:
 ```
 Tradeoffs:
 ```
-1. React Native vs (Flutter and Native)
-2. Serverless vs Microservices
-3. Redis vs Enbeded Caches
+1. Amazon Keyspaces vs Amazon RDS
+2. Amazon Cognito vs Keycloak
+3. Loki vs CloudWatch
+4. AWS EKS vs AWS ECS
+5. LiveKit vs MediaSoup
+6. AWS ALB vs AWS ELB
+7. SWift vs Objective C
 ```
 Each tradeoff line need to be:
 
