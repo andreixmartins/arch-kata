@@ -8,7 +8,7 @@
 What is the problem? What is the context of the problem?
 Example:
 ```
-MR Bill, wants a system to keep track of his favorite pocs, so you need to build a mobile app where mr Bill can register all his pocs, and also  
+MR Bill, wants a system to keep track of his favorite pocs, so you need to build a mobile app where mr Bill can register all his pocs, and also
 he needs to be able to search pocs, by name, by language,m by tags.
 This system should be multi-tenant because mr bill will sell such system to.
 Bunch of people in brazil, such system must have also ability to generate repots and generate a video with the all pocs
@@ -34,14 +34,14 @@ Example:
 ```
 1. Solution needs to be fast! Performance for all operations bellow ~1 ms.
 2. Security is non-negociable! Security at-rest, transite, threat analysis and review for by at least 3 different people.
-3. Mobile-native: We want a native app using Swift and Kotlin 
+3. Mobile-native: We want a native app using Swift and Kotlin
 4. Cloud-Native: All backend must be 100% cloud native, using AWS Cloud services
 5. Microservices: Do not use AWS Lambdas
 6. Cache: AWS Elastic Cache to cache user data information
 7. Tests: Employ unit tests, integration tests, regression tests, chaos tests
 8. Microservices: App services must use the microservice architecture
 9. Amazon OpenSearch: Realtime application monitoring and security Analytics
-10. Amazon RDS: Postgres for relational data 
+10. Amazon RDS: Postgres for relational data
 ```
 Recommended Learning: http://diego-pacheco.blogspot.com/2020/05/education-vs-learning.html
 
@@ -81,8 +81,8 @@ Recommended Reading: http://diego-pacheco.blogspot.com/2018/01/stability-princip
 Here there will be a bunch of diagrams, to understand the solution.
 ```
 🗂️ 4.1 Overall architecture: Show the big picture, relationship between macro components.
-🗂️ 4.2 Deployment: Show the infra in a big picture. 
-🗂️ 4.3 Use Cases: Make 1 macro use case diagram that list the main capability that needs to be covered. 
+🗂️ 4.2 Deployment: Show the infra in a big picture.
+🗂️ 4.3 Use Cases: Make 1 macro use case diagram that list the main capability that needs to be covered.
 ```
 Recommended Reading: http://diego-pacheco.blogspot.com/2020/10/uml-hidden-gems.html
 
@@ -91,7 +91,7 @@ Recommended Reading: http://diego-pacheco.blogspot.com/2020/10/uml-hidden-gems.h
 List the tradeoffs analysis, comparing pros and cons for each major decision.
 Before you need list all your major decisions, them run tradeoffs on than.
 example:
-Major Decisions: 
+Major Decisions:
 ```
 1. One mobile code base - should be (...)
 2. Reusable capability and low latency backends should be (...)
@@ -107,7 +107,7 @@ Tradeoffs:
 ```
 Each tradeoff line need to be:
 ```
-PROS (+) 
+PROS (+)
   * Benefit: Explanation that justify why the benefit is true.
 CONS (+)
   * Problem: Explanation that justify why the problem is true.
@@ -130,8 +130,32 @@ PROS (+)
   * Benefit: Fully Managed by AWS. AWS handles all underlying infrastructure, including provisioning, patching, backups, failure detection, and failover. The management interface is integrated into the AWS console, CLI, and APIs, providing a seamless experience with other AWS services. This drastically reduces the operational burden on your team.
 CONS (-)
   * Problem: Managed Service Constraints. You trade control for convenience. You have limited access to the underlying OS and cannot fine-tune every low-level database or system parameter. You are also dependent on AWS's timeline for support of new database versions and features.
+
+
+5. Network
+AWS EKS
+PROS (+)
+  * Benefit: Managed Kubernetes reduces operational burden by handling control plane provisioning, scaling, patching, and upgrades automatically. Integrates natively with AWS networking, security, and monitoring services.
+
+CONS (-)
+  * Problem: Extra cost for control plane and managed services; networking setup (CNI, service mesh) can be complex, especially for multi-AZ or hybrid deployments.
+
+AWS API GATEWAY
+PROS (+)
+  * Benefit: Provides a fully managed API layer with built-in authentication, throttling, caching, and monitoring, automatically handling high request volumes without infrastructure scaling.
+
+CONS (-)
+  * Problem: Adds network latency (~10–50ms per request), which may impact ultra-low-latency requirements; pricing can grow with traffic; limited low-level network control.
+
+MULTI TENANT ARCHITECTURE
+PROS (+)
+  * Benefit: Enables logical isolation of tenants, reducing operational cost by sharing infrastructure while maintaining security. Centralized network policies and monitoring simplify management.
+
+CONS (-)
+  * Problem: Implementing strict isolation and traffic policies is complex; misconfigurations can lead to data leakage; scaling to many tenants may require careful IP and cluster planning.
+
 ```
-PS: Be careful to not confuse problem with explanation. 
+PS: Be careful to not confuse problem with explanation.
 <BR/>Recommended reading: http://diego-pacheco.blogspot.com/2023/07/tradeoffs.html
 
 ### 🌏 6. For each key major component
@@ -142,9 +166,65 @@ What is a majore component? A service, a lambda, a important ui, a generalized a
 6.2 - Contract Documentation     : Operations, Inputs and Outputs
 6.3 - Persistence Model          : Diagrams, Table structure, partiotioning, main queries.
 6.4 - Algorithms/Data Structures : Spesific algos that need to be used, along size with spesific data structures.
+
+
+## Report Service
+### 6.1 - Report Service Class Diagram
+here go the image
+
+### 6.2 - Report Service Contract Documentation
+- ReportService
+  * createReport(params: Map) → Input: params (filters, type, user) → Output: Report
+  * getReportById(id: UUID) → Input: report ID → Output: Report
+  * listReports() → Input: none → Output: List of Reports
+
+- ReportGenerator
+  * generate(data: Any, format: Format) → Input: raw data, desired format → Output: Report
+
+- ReportFormatter
+  * formatAsPDF(report: Report) → Input: Report → Output: PDF File
+  * formatAsCSV(report: Report) → Input: Report → Output: CSV File
+  * formatAsHTML(report: Report) → Input: Report → Output: HTML File
+
+- ReportRepository
+  * save(report: Report) → Input: Report → Output: void
+  * findById(id: UUID) → Input: report ID → Output: Report
+  * findAll() → Input: none → Output: List of Reports
+
+- User
+  * requestReport(params: Map) → Input: parameters → Output: Report
+
+### 6.3 - Report Service Persistence Model
+here go the image
+
+Main Queries
+Insert:
+  * INSERT INTO reports (id, title, content, created_at) VALUES (?, ?, ?, ?)
+
+Find by ID:
+  * SELECT * FROM reports WHERE id = ?
+
+List All:
+  * SELECT * FROM reports ORDER BY created_at DESC
+
+### 6.4 - Report Service Algorithms / Data Structures
+Algorithms
+  * Formatting:
+    * PDF generation: simple template-based rendering (e.g., iText or jsPDF).
+    * CSV: string serialization with delimiter.
+    * HTML: lightweight template rendering.
+
+  * Search & Retrieval:
+    * basic indexed lookups by id and created_at.
+
+Data Structures
+  * Map: for dynamic params when creating reports.
+  * List: to store multiple reports in memory when listing.
+  * UUID: unique identifier for Report and User.
+  * DateTime: for timestamps.
 ```
 
-Exemplos of other components: Batch jobs, Events, 3rd Party Integrations, Streaming, ML Models, ChatBots, etc... 
+Exemplos of other components: Batch jobs, Events, 3rd Party Integrations, Streaming, ML Models, ChatBots, etc...
 
 Recommended Reading: http://diego-pacheco.blogspot.com/2018/05/internal-system-design-forgotten.html
 
