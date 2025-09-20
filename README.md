@@ -107,41 +107,75 @@ Tradeoffs:
 ```
 Each tradeoff line need to be:
 ```
-PROS (+)
-  * Benefit: Explanation that justify why the benefit is true.
-CONS (+)
-  * Problem: Explanation that justify why the problem is true.
 
-
-1. AWS Aurora PostgreSQL vs. AWS RDS for PostgreSQL
+Amazon Keyspaces
 PROS (+)
-  * Benefit: Superior Performance Architecture. Aurora's cloud-native, decoupled storage layer is specifically engineered for high throughput and low-latency I/O, making the consistent ~1ms performance target achievable. While RDS relies on network-attached EBS storage, which introduces inherent latency. Even the fastest io2 EBS volumes typically have latencies in the low milliseconds, making it extremely difficult to consistently stay under the 1ms threshold, especially for write operations and uncached reads under load.
+  * Multi-Tenant Isolation - Native partition-based isolation ensures complete tenant data separation without complex application logic.
+  * Auto-Scaling - Seamlessly handles variable workloads across tenants without manual intervention or capacity planning.
+  * Zero Maintenance - Fully managed service eliminates patching, backups, and cluster management overhead.
+  * High Availability - Built-in multi-AZ replication with automatic failover provides 99.99% availability SLA.
+  * Cost Efficiency - Pay-per-request pricing model scales cost with actual usage, ideal for multi-tenant SaaS applications.
 CONS (-)
-  * Problem: Higher Financial Cost. Aurora has a more complex and expensive pricing model based on instance size, storage consumption, and I/O operations, leading to a higher monthly bill compared to standard RDS.
+  * Query Limitations - No support for complex joins or aggregations limits analytical capabilities for reporting features.
+  * Eventual Consistency - Default eventual consistency may cause temporary data inconsistencies in real-time scenarios.
+  * Vendor Lock-in - AWS-specific service creates dependency on AWS ecosystem and CQL dialect.
+  * Cold Start Latency - Initial queries after idle periods may experience higher latency due to distributed nature.
+  * Limited Indexing - Secondary indexes have performance implications and query restrictions compared to relational databases.
 
-2. AWS Aurora PostgreSQL vs. Self-Managed PostgreSQL on EC2
+AWS RDS Aurora
 PROS (+)
-  * Benefit: Reduced Operational Complexity. As a fully managed service, Aurora automates provisioning, patching, backups, and, most critically, high-availability failover, freeing developers from database administration tasks.
+  * ACID Compliance - Full transactional consistency ensures data integrity for critical business operations and financial transactions.
+  * Compatibility - Complete PostgreSQL compatibility enables complex queries, joins, and existing application migration.
+  * Performance - Sub-millisecond read latencies with read replicas support high-throughput analytical workloads.
+  * Advanced Features - Supports stored procedures, triggers, and advanced SQL features for complex business logic.
+  * Monitoring - Performance Insights provides detailed query-level monitoring and optimization recommendations.
 CONS (-)
-  * Problem: Less Granular Control. Choosing Aurora means accepting AWS's managed path, which involves less direct control over underlying OS and database engine tuning compared to a self-managed instance on EC2.
+  * Operational Complexity - Requires instance sizing, connection pooling, and performance tuning expertise.
+  * Multi-Tenant Challenges - Requires application-level tenant isolation and careful schema design to prevent data leakage.
+  * Scaling Limitations - Vertical scaling has limits; horizontal scaling requires read replicas and application changes.
+  * Cost Predictability - Fixed instance costs regardless of usage patterns may be expensive for variable workloads.
+  * Maintenance Windows - Requires planned downtime for patches and major version upgrades.
 
-3. AWS Aurora PostgreSQL vs. Apache Cassandra
+AWS RDS for PostgreSQL
 PROS (+)
-  * Benefit: Fully Managed by AWS. AWS handles all underlying infrastructure, including provisioning, patching, backups, failure detection, and failover. The management interface is integrated into the AWS console, CLI, and APIs, providing a seamless experience with other AWS services. This drastically reduces the operational burden on your team.
+  * Mature Ecosystem - Extensive PostgreSQL ecosystem with proven libraries, tools, and community support.
+  * Rich Data Types - Native support for JSON, arrays, and custom types enables flexible data modeling.
+  * Full SQL Support - Complete SQL standard compliance with advanced features like window functions and CTEs.
+  * Benefit: Backup & Recovery - Automated backups with point-in-time recovery provide robust data protection.
+  * Security Features - Row-level security and advanced authentication options support complex multi-tenant security models.
 CONS (-)
-  * Problem: Managed Service Constraints. You trade control for convenience. You have limited access to the underlying OS and cannot fine-tune every low-level database or system parameter. You are also dependent on AWS's timeline for support of new database versions and features.
+  * Manual Scaling - Requires manual intervention for scaling up/down and lacks automatic capacity adjustment.
+  * Single Point of Failure - Standard RDS has potential downtime during failover events in Multi-AZ deployments.
+  * Resource Contention - Shared resources between tenants can lead to noisy neighbor problems affecting performance.
+  * Storage Limitations - EBS storage has IOPS limits that may constrain high-throughput applications.
+  * Maintenance Overhead - Requires regular maintenance, parameter tuning, and performance monitoring.
+
+S3 (Amazon Simple Storage Service)
+PROS (+)
+  * Scalability - Highly scalable, can handle vast amounts of data.
+  * Low maintainability - Managed service by AWS, reducing the need for in-house maintenance.
+  * Integration - Seamlessly integrates with other AWS services.
+  * Global Availability - Data can be accessed from anywhere in the world with low latency.
+  * Cost-Effective - Pay-as-you-go pricing model, which can be economical for many use cases.
+
+CONS (-)
+  * Cost - Can become expensive with high data retrieval and transfer rates.
+  * Vendor Lock-in - Ties you to the AWS ecosystem, making migration to other platforms challenging.
+  * Limited Customization - Less flexibility in terms of configuration and customization compared to self-managed solutions.
+  * Latency - May have higher latency for certain applications compared to local storage solutions.
+  * Data Transfer Costs - Charges for data transfer out of S3 can add up, especially for high-traffic applications.
 
 4. Splunk vs Loki vs CloudWatch
 Splunk
 PROS (+)
-  * Benefit: Provides advanced analytics and full-text search capabilities through SPL (Search Processing Language), which makes it ideal for complex queries and security/compliance use cases.
-  * Benefit: Flexible deployment options (on-premises, hybrid, or cloud), giving organizations control over their infrastructure strategy.
-  * Benefit: Mature ecosystem with dashboards, alerting, and SIEM(Security Information and Event Management) features that cover enterprise needs out of the box.
+  * Provides advanced analytics and full-text search capabilities through SPL (Search Processing Language), which makes it ideal for complex queries and security/compliance use cases.
+  * Flexible deployment options (on-premises, hybrid, or cloud), giving organizations control over their infrastructure strategy.
+  * Mature ecosystem with dashboards, alerting, and SIEM(Security Information and Event Management) features that cover enterprise needs out of the box.
 
 CONS (−)
-  * Problem: Licensing and data ingestion/storage costs scale steeply, making Splunk very expensive at high log volumes.
-  * Problem: Requires significant operational overhead for scaling and managing indexes, even in Splunk Cloud environments.
-  * Problem: Vendor lock-in due to proprietary ecosystem and pricing model.
+  * Licensing and data ingestion/storage costs scale steeply, making Splunk very expensive at high log volumes.
+  * Requires significant operational overhead for scaling and managing indexes, even in Splunk Cloud environments.
+  * Vendor lock-in due to proprietary ecosystem and pricing model.
 
 Grafana Loki
 PROS (+)
@@ -150,22 +184,98 @@ PROS (+)
   * Benefit: Scales horizontally and is well-suited for high-volume logs with structured labels.
 
 CONS (−)
-  * Problem: Weaker full-text search compared to Splunk, since only metadata is indexed.
-  * Problem: Requires self-hosting or managed services, which introduces infrastructure and operational overhead.
-  * Problem: Lacks some enterprise-grade features (security/compliance, SIEM(Security Information and Event Management)) without additional tooling.
+  * Weaker full-text search compared to Splunk, since only metadata is indexed.
+  * Requires self-hosting or managed services, which introduces infrastructure and operational overhead.
+  * Lacks some enterprise-grade features (security/compliance, SIEM(Security Information and Event Management)) without additional tooling.
 
 Amazon CloudWatch
 PROS (+)
-  * Benefit: Fully managed service with minimal operational overhead, tightly integrated with AWS ecosystem (EC2, Lambda, RDS, etc.).
-  * Benefit: Pay-as-you-go pricing model with a free tier, making it easy to adopt and scale within AWS.
-  * Benefit: Provides unified metrics, logs, alarms, and dashboards in one platform, reducing integration complexity.
+  * Fully managed service with minimal operational overhead, tightly integrated with AWS ecosystem (EC2, Lambda, RDS, etc.).
+  * Pay-as-you-go pricing model with a free tier, making it easy to adopt and scale within AWS.
+  * Provides unified metrics, logs, alarms, and dashboards in one platform, reducing integration complexity.
 
 CONS (−)
-  * Problem: Costs can escalate quickly with high log ingestion, retention, or custom metrics usage.
-  * Problem: Limited flexibility and portability—mainly useful for AWS workloads, not multi-cloud or on-premises.
-  * Problem: Log search and query capabilities (CloudWatch Logs Insights) are less powerful and slower compared to Splunk for complex analytics.
+  * Costs can escalate quickly with high log ingestion, retention, or custom metrics usage.
+  * Limited flexibility and portability—mainly useful for AWS workloads, not multi-cloud or on-premises.
+  * Log search and query capabilities (CloudWatch Logs Insights) are less powerful and slower compared to Splunk for complex analytics.
 ```
+
+  * Problem: Managed Service Constraints. You trade control for convenience. You have limited access to the underlying OS and cannot fine-tune every low-level database or system parameter. You are also dependent on AWS's timeline for support of new database versions and features.
+
 PS: Be careful to not confuse problem with explanation.
+=======
+
+```
+
+## Application Load Balancer (ALB)
+
+### Use Cases
+- HTTP/HTTPS traffic
+- Web applications, REST APIs
+- Microservices or containerized applications (ECS, EKS)
+- Host-based or path-based routing
+- Authentication via Cognito or OIDC
+- WebSocket and HTTP/2 support
+
+### ✅ Pros
+- Operates at Layer 7 (Application Layer)
+- Intelligent request routing (host/path headers)
+- Integrated with AWS WAF 
+- Supports advanced routing (redirects, fixed responses)
+- Native support for HTTP/2 and WebSockets
+
+### ❌ Cons
+- Only supports HTTP and HTTPS protocols
+- Slightly higher latency than NLB
+- No static IP support
+
+
+## Network Load Balancer (NLB)
+
+### Use Cases
+- TCP, UDP, and TLS traffic
+- Real-time applications (VoIP, gaming, financial apps)
+- Applications requiring very low latency and high throughput
+- Need for static IP or Elastic IP addresses
+- Preserving the client IP address
+
+### ✅ Pros
+- Operates at Layer 4 (Transport Layer)
+- Extremely high performance and low latency
+- Handles millions of requests per second
+- Static IP and Elastic IP support
+- TLS termination and pass-through support
+
+### ❌ Cons
+- No application-layer routing (no path/host-based routing)
+- Limited visibility into HTTP-layer traffic
+- No direct integration with AWS WAF or Cognito
+
+## Load Balancing Algorithms Used in AWS
+
+### Application Load Balancer (ALB)
+
+- **Round Robin (Default)**  
+  Requests are distributed sequentially across targets in a target group.  
+  Good for evenly sized workloads.
+
+- **Least Outstanding Requests**  
+  Requests are routed to the target with the fewest active (in-flight) requests.  
+  Better for variable latency workloads.
+
+### Network Load Balancer (NLB)
+
+- **Flow Hash Algorithm (Default)**  
+  Uses a 5-tuple hash (source IP, source port, destination IP, destination port, protocol) to consistently route traffic to the same target.  
+  Preserves session affinity (*sticky sessions*) by default.
+
+- **Source IP Affinity (Optional)**  
+  Allows you to enable stickiness based on the source IP address.  
+  Useful when consistent backend assignment is needed as session-based apps.
+
+
+PS: Be careful to not confuse problem with explanation. 
+
 <BR/>Recommended reading: http://diego-pacheco.blogspot.com/2023/07/tradeoffs.html
 
 ### 🌏 6. For each key major component
