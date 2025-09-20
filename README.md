@@ -690,15 +690,26 @@ Recommended Reading: http://diego-pacheco.blogspot.com/2018/05/internal-system-d
 
 ### 🖹 7. Migrations
 
-IF Migrations are required describe the migrations strategy with proper diagrams, text and tradeoffs.
+- N/A
 
 ### 🖹 8. Testing strategy
 
-Explain the techniques, principles, types of tests and will be performaned, and spesific details how to mock data, stress test it, spesific chaos goals and assumptions.
+- Manual testing -  Involves manual inspection and testing of the software by a human tester.
+- Automated testing - software tools to automate the testing process
+- Unit testing - Tests individual units or components of the software to ensure they are functioning as intended.
+- Integration testing - Tests the integration of different components of the software to ensure they work together as a system.
+- Regression testing – Tests the software after changes or modifications have been made to ensure the changes have not introduced new defects.
+- Performance testing - Tests the software to determine its performance characteristics such as speed, scalability, and stability.
+- Security testing – Tests the software to identify vulnerabilities and ensure it meets security requirements.
+- Usability testing – Tests the software to evaluate its user-friendliness and ease of use.
 
 ### 🖹 9. Observability strategy
 
 Explain the techniques, principles,types of observability that will be used, key metrics, what would be logged and how to design proper dashboards and alerts.
+
+- Dojo system will generated service metrics , the metrics will be consumed by Prometheus,Grafana and Loki stack 
+- Grafana will provide customized dashboards to identify errors , alerts and also providing ways to troubleshoot 
+- Metrics dashboards should contain errors,alert identifying any service errors
 
 ### 🖹 10. Data Store Designs
 
