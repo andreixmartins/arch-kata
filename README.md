@@ -8,7 +8,7 @@
 What is the problem? What is the context of the problem?
 Example:
 ```
-MR Bill, wants a system to keep track of his favorite pocs, so you need to build a mobile app where mr Bill can register all his pocs, and also  
+MR Bill, wants a system to keep track of his favorite pocs, so you need to build a mobile app where mr Bill can register all his pocs, and also
 he needs to be able to search pocs, by name, by language,m by tags.
 This system should be multi-tenant because mr bill will sell such system to.
 Bunch of people in brazil, such system must have also ability to generate repots and generate a video with the all pocs
@@ -34,14 +34,14 @@ Example:
 ```
 1. Solution needs to be fast! Performance for all operations bellow ~1 ms.
 2. Security is non-negociable! Security at-rest, transite, threat analysis and review for by at least 3 different people.
-3. Mobile-native: We want a native app using Swift and Kotlin 
+3. Mobile-native: We want a native app using Swift and Kotlin
 4. Cloud-Native: All backend must be 100% cloud native, using AWS Cloud services
 5. Microservices: Do not use AWS Lambdas
 6. Cache: AWS Elastic Cache to cache user data information
 7. Tests: Employ unit tests, integration tests, regression tests, chaos tests
 8. Microservices: App services must use the microservice architecture
 9. Amazon OpenSearch: Realtime application monitoring and security Analytics
-10. Amazon RDS: Postgres for relational data 
+10. Amazon RDS: Postgres for relational data
 ```
 Recommended Learning: http://diego-pacheco.blogspot.com/2020/05/education-vs-learning.html
 
@@ -81,8 +81,8 @@ Recommended Reading: http://diego-pacheco.blogspot.com/2018/01/stability-princip
 Here there will be a bunch of diagrams, to understand the solution.
 ```
 🗂️ 4.1 Overall architecture: Show the big picture, relationship between macro components.
-🗂️ 4.2 Deployment: Show the infra in a big picture. 
-🗂️ 4.3 Use Cases: Make 1 macro use case diagram that list the main capability that needs to be covered. 
+🗂️ 4.2 Deployment: Show the infra in a big picture.
+🗂️ 4.3 Use Cases: Make 1 macro use case diagram that list the main capability that needs to be covered.
 ```
 Recommended Reading: http://diego-pacheco.blogspot.com/2020/10/uml-hidden-gems.html
 
@@ -91,7 +91,7 @@ Recommended Reading: http://diego-pacheco.blogspot.com/2020/10/uml-hidden-gems.h
 List the tradeoffs analysis, comparing pros and cons for each major decision.
 Before you need list all your major decisions, them run tradeoffs on than.
 example:
-Major Decisions: 
+Major Decisions:
 ```
 1. One mobile code base - should be (...)
 2. Reusable capability and low latency backends should be (...)
@@ -107,7 +107,7 @@ Tradeoffs:
 ```
 Each tradeoff line need to be:
 ```
-PROS (+) 
+PROS (+)
   * Benefit: Explanation that justify why the benefit is true.
 CONS (+)
   * Problem: Explanation that justify why the problem is true.
@@ -130,8 +130,42 @@ PROS (+)
   * Benefit: Fully Managed by AWS. AWS handles all underlying infrastructure, including provisioning, patching, backups, failure detection, and failover. The management interface is integrated into the AWS console, CLI, and APIs, providing a seamless experience with other AWS services. This drastically reduces the operational burden on your team.
 CONS (-)
   * Problem: Managed Service Constraints. You trade control for convenience. You have limited access to the underlying OS and cannot fine-tune every low-level database or system parameter. You are also dependent on AWS's timeline for support of new database versions and features.
+
+4. Splunk vs Loki vs CloudWatch
+Splunk
+PROS (+)
+  * Benefit: Provides advanced analytics and full-text search capabilities through SPL (Search Processing Language), which makes it ideal for complex queries and security/compliance use cases.
+  * Benefit: Flexible deployment options (on-premises, hybrid, or cloud), giving organizations control over their infrastructure strategy.
+  * Benefit: Mature ecosystem with dashboards, alerting, and SIEM(Security Information and Event Management) features that cover enterprise needs out of the box.
+
+CONS (−)
+  * Problem: Licensing and data ingestion/storage costs scale steeply, making Splunk very expensive at high log volumes.
+  * Problem: Requires significant operational overhead for scaling and managing indexes, even in Splunk Cloud environments.
+  * Problem: Vendor lock-in due to proprietary ecosystem and pricing model.
+
+Grafana Loki
+PROS (+)
+  * Benefit: Open-source and cost-efficient because only metadata (labels + timestamp) is indexed, reducing storage and compute costs.
+  * Benefit: Integrates seamlessly with Grafana, Prometheus, and Kubernetes, making it a natural fit for cloud-native observability stacks.
+  * Benefit: Scales horizontally and is well-suited for high-volume logs with structured labels.
+
+CONS (−)
+  * Problem: Weaker full-text search compared to Splunk, since only metadata is indexed.
+  * Problem: Requires self-hosting or managed services, which introduces infrastructure and operational overhead.
+  * Problem: Lacks some enterprise-grade features (security/compliance, SIEM(Security Information and Event Management)) without additional tooling.
+
+Amazon CloudWatch
+PROS (+)
+  * Benefit: Fully managed service with minimal operational overhead, tightly integrated with AWS ecosystem (EC2, Lambda, RDS, etc.).
+  * Benefit: Pay-as-you-go pricing model with a free tier, making it easy to adopt and scale within AWS.
+  * Benefit: Provides unified metrics, logs, alarms, and dashboards in one platform, reducing integration complexity.
+
+CONS (−)
+  * Problem: Costs can escalate quickly with high log ingestion, retention, or custom metrics usage.
+  * Problem: Limited flexibility and portability—mainly useful for AWS workloads, not multi-cloud or on-premises.
+  * Problem: Log search and query capabilities (CloudWatch Logs Insights) are less powerful and slower compared to Splunk for complex analytics.
 ```
-PS: Be careful to not confuse problem with explanation. 
+PS: Be careful to not confuse problem with explanation.
 <BR/>Recommended reading: http://diego-pacheco.blogspot.com/2023/07/tradeoffs.html
 
 ### 🌏 6. For each key major component
@@ -144,7 +178,7 @@ What is a majore component? A service, a lambda, a important ui, a generalized a
 6.4 - Algorithms/Data Structures : Spesific algos that need to be used, along size with spesific data structures.
 ```
 
-Exemplos of other components: Batch jobs, Events, 3rd Party Integrations, Streaming, ML Models, ChatBots, etc... 
+Exemplos of other components: Batch jobs, Events, 3rd Party Integrations, Streaming, ML Models, ChatBots, etc...
 
 Recommended Reading: http://diego-pacheco.blogspot.com/2018/05/internal-system-design-forgotten.html
 
