@@ -157,36 +157,31 @@ CONS (-)
 
 ```
 
-## Security
-### Cognito:
-```
+AWS Cognito
+PROS (+)
+  * Benefit: Easy SMS MFA Setup - Phone verification is provided out of the box with pre-built web pages and verification logic, reducing development time.
+  * Benefit: Great Mobile App Support - Native Android and iOS SDKs are available, enabling seamless integration with mobile applications.
+  * Benefit: Fully Managed Service - AWS handles all infrastructure, scaling, and maintenance, reducing operational overhead.
+  * Benefit: AWS Ecosystem Integration - Seamless integration with other AWS services like Lambda, API Gateway, and S3 for unified security.
+CONS (-)
+  * Problem: Multi-Tenant Limitations - User pools are not multi-tenant by design, requiring a dedicated user pool per tenant which complicates architecture.
+  * Problem: Scalability Constraints - Limited to 1000 user pools per AWS account, which severely restricts multi-tenant application scaling.
+  * Problem: Limited Customization - Restricted ability to customize authentication flows and user interface compared to self-hosted solutions.
+  * Problem: Vendor Lock-in - Tight integration with AWS ecosystem makes migration to other platforms or hybrid cloud approaches difficult.
 
-PROS (+) 
-  * Easy to setup SMS MFA: Phone verification is provided out of the box, the web page and verification logic is provided by it.
-  * Great support for Mobile Apps: There are Android and iOS SDKs available
-  * Fully managed by AWS, cloud-based
-CONS (+)
-  * User pool in AWS Cognito is not multi-tenant: In order to create a multi-tenant system we have to have a dedicated user pool per tenant.
-  * Limitation of 1000 user pools per AWS account: very little if we want to scale a multi-tenant application.
-  * Limited Customization
-  * Tight AWS ecosystem integration (it might not apply to our case since we are all AWS)
-```
-
-### Keycloak:
-```
-
-PROS (+) 
-  * Easily configurable to multi-tenant
-  * Open-source, self hosted
-  * Cost: Free (Infrastructure costs apply)
-  * Highly customizable
-  * Platform-agnostic
-CONS (+)
-  * User pool in AWS Cognito is not multi-tenant: In order to create a multi-tenant system we have to have a dedicated user pool per tenant.
-  * Limitation of 1000 user pools per AWS account: very little if we want to scale a multi-tenant application.
-  * No Native SDKs Available
-  * Problem: Explanation that justify why the problem is true.
-
+Keycloak
+PROS (+)
+  * Benefit: Multi-Tenant Architecture - Easily configurable for multi-tenant scenarios with realm-based isolation and flexible tenant management.
+  * Benefit: Open Source Flexibility - Open-source solution provides full control over customization, extensions, and deployment strategies.
+  * Benefit: Cost Efficiency - Free software with only infrastructure costs, providing significant cost savings for large-scale deployments.
+  * Benefit: High Customization - Highly customizable authentication flows, themes, and extensions to meet specific business requirements.
+  * Benefit: Platform Agnostic - Can be deployed on any infrastructure or cloud provider, avoiding vendor lock-in.
+CONS (-)
+  * Problem: Operational Overhead - Self-hosted solution requires managing infrastructure, updates, security patches, and high availability setup.
+  * Problem: Limited Mobile SDKs - No native mobile SDKs available, requiring custom integration work for mobile applications.
+  * Problem: Complexity - More complex to set up and configure compared to managed services, requiring specialized expertise.
+  * Problem: Maintenance Burden - Requires ongoing maintenance, monitoring, and troubleshooting that managed services handle automatically.
+  
 PS: Be careful to not confuse problem with explanation. 
 <BR/>Recommended reading: http://diego-pacheco.blogspot.com/2023/07/tradeoffs.html
 
