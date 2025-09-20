@@ -316,77 +316,8 @@ CONS (-)
   * Problem: Complexity - More complex to set up and configure compared to managed services, requiring specialized expertise.
   * Problem: Maintenance Burden - Requires ongoing maintenance, monitoring, and troubleshooting that managed services handle automatically.
   
-=======
-
-## Application Load Balancer (ALB)
-
-### Use Cases
-- HTTP/HTTPS traffic
-- Web applications, REST APIs
-- Microservices or containerized applications (ECS, EKS)
-- Host-based or path-based routing
-- Authentication via Cognito or OIDC
-- WebSocket and HTTP/2 support
-
-### ✅ Pros
-- Operates at Layer 7 (Application Layer)
-- Intelligent request routing (host/path headers)
-- Integrated with AWS WAF 
-- Supports advanced routing (redirects, fixed responses)
-- Native support for HTTP/2 and WebSockets
-
-### ❌ Cons
-- Only supports HTTP and HTTPS protocols
-- Slightly higher latency than NLB
-- No static IP support
-
-
-## Network Load Balancer (NLB)
-
-### Use Cases
-- TCP, UDP, and TLS traffic
-- Real-time applications (VoIP, gaming, financial apps)
-- Applications requiring very low latency and high throughput
-- Need for static IP or Elastic IP addresses
-- Preserving the client IP address
-
-### ✅ Pros
-- Operates at Layer 4 (Transport Layer)
-- Extremely high performance and low latency
-- Handles millions of requests per second
-- Static IP and Elastic IP support
-- TLS termination and pass-through support
-
-### ❌ Cons
-- No application-layer routing (no path/host-based routing)
-- Limited visibility into HTTP-layer traffic
-- No direct integration with AWS WAF or Cognito
-
-## Load Balancing Algorithms Used in AWS
-
-### Application Load Balancer (ALB)
-
-- **Round Robin (Default)**  
-  Requests are distributed sequentially across targets in a target group.  
-  Good for evenly sized workloads.
-
-- **Least Outstanding Requests**  
-  Requests are routed to the target with the fewest active (in-flight) requests.  
-  Better for variable latency workloads.
-
-### Network Load Balancer (NLB)
-
-- **Flow Hash Algorithm (Default)**  
-  Uses a 5-tuple hash (source IP, source port, destination IP, destination port, protocol) to consistently route traffic to the same target.  
-  Preserves session affinity (*sticky sessions*) by default.
-
-- **Source IP Affinity (Optional)**  
-  Allows you to enable stickiness based on the source IP address.  
-  Useful when consistent backend assignment is needed as session-based apps.
-
 
 PS: Be careful to not confuse problem with explanation. 
-
 
 <BR/>Recommended reading: http://diego-pacheco.blogspot.com/2023/07/tradeoffs.html
 
@@ -401,7 +332,7 @@ What is a majore component? A service, a lambda, a important ui, a generalized a
 ```
 
 
-### Persistence Model
+### 6.3 Persistence Model
 
 ### **User**
 
@@ -494,7 +425,11 @@ select currentDate(), dateof(now()), id, userid, username, roomname, content, re
 ```
 
 
-### Algorithms / Data Structures
+### 6.4 - Algorithms/Data Structures
+
+- Queue for creating/deleting messages
+- Queue for message notifications
+
 
 ### **Data Structures**
 
