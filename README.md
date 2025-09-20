@@ -396,164 +396,99 @@ What is a majore component? A service, a lambda, a important ui, a generalized a
 6.4 - Algorithms/Data Structures : Spesific algos that need to be used, along size with spesific data structures.
 ```
 
-## Dojo Session
-
-### Class Diagram
-
-```plaintext
-+---------------------------------+
-|         RoomService             |
-+---------------------------------+
-| - rooms: Map<string, Room>      |
-+---------------------------------+
-| + createRoom(name): Room        |
-| + getRoom(name): Room           |
-| + closeRoom(name): void         |
-+---------------------------------+
-
-               |
-               ▼
-
-+---------------------------------+
-|             Room                |
-+---------------------------------+
-| - name: string                  |
-| - participants: Set<Participant>|
-| - tracks: Map<string, Track>    |
-+---------------------------------+
-| + addParticipant(p): void       |
-| + removeParticipant(p): void    |
-| + broadcastMessage(msg): void   |
-+---------------------------------+
-
-              |
-              ▼
-
-+--------------------------------+
-|         Participant            |
-+--------------------------------+
-| - id: string                   |
-| - identity: string             |
-| - role: string                 |
-| - tracks: Set<Track>           |
-+--------------------------------+
-| + publishTrack(track): void    |
-| + unpublishTrack(track): void  |
-| + sendSignal(msg): void        |
-+--------------------------------+
-
-             |
-             ▼
-
-+--------------------------------+
-|             Track              |
-+--------------------------------+
-| - id: string                   |
-| - kind: 'audio' | 'video'      |
-| - codec: string                |
-+--------------------------------+
-| + start(): void                |
-| + stop(): void                 |
-+--------------------------------+
-```
-
----
-
-### Contract Documentation
-
-### **RoomService**
-
-- **createRoom(name: string) → Room**
-  Creates a new room instance.
-
-- **getRoom(name: string) → Room**
-  Retrieves the room by name.
-
-- **closeRoom(name: string) → void**
-  Closes the room and disconnects participants.
-
----
-
-### **Room**
-
-- **addParticipant(p: Participant) → void**
-  Adds a participant to the room.
-
-- **removeParticipant(p: Participant) → void**
-  Removes a participant from the room.
-
-- **broadcastMessage(msg: SignalMessage) → void**
-  Sends a signal to all participants.
-
----
-
-### **Participant**
-
-- **publishTrack(track: Track) → void**
-  Publishes a media track to the room.
-
-- **unpublishTrack(track: Track) → void**
-  Stops publishing a track.
-
-- **sendSignal(msg: SignalMessage) → void**
-  Sends a signaling message to server or other participants.
-
----
 
 ### Persistence Model
 
-### **Diagrams / Table Structures**
+### **User**
 
-```plaintext
-Table: rooms
-- id (PK)
-- name
-- created_at
-- is_active
+| NAME      | TYPE        | SIZE | NOT NULL | DEFAULT           | DESCRIPTION                     |
+|-----------|-------------|------|----------|-------------------|---------------------------------|
+| id        | uuid        |      | NO       |                   | uuid primary key                |                 
+| groupid   | uuid        |      | NO       |                   | uuid primary key                |                 
+| username  | varchar     | 15   | NO       |                   | username must have an index     |
+| firstname | varchar     | 30   | NO       |                   |                                 |
+| lastname  | varchar     | 30   | NO       |                   |                                 |
+| email     | varchar     | 50   | NO       |                   |                                 |
+| age       | tinyint     | 3    | NO       |                   |                                 |
+| created   | timestamp   |      | NO       | current_timestamp |                                 |
+| updated   | timestamp   |      | NO       | current_timestamp |                                 |
 
-Table: participants
-- id (PK)
-- room_id (FK -> rooms.id)
-- identity
-- role
-- joined_at
-- is_connected
 
-Table: tracks
-- id (PK)
-- participant_id (FK -> participants.id)
-- kind
-- codec
-- created_at
+### **Room**
+
+| NAME      | TYPE        | SIZE | NOT NULL | DEFAULT           | DESCRIPTION                     |
+|-----------|-------------|------|----------|-------------------|---------------------------------|
+| id        | uuid        |      | NO       |                   | uuid primary key                |   
+| userid    | uuid        |      | NO       |                   | uuid user table                 |
+| name      | varchar     | 50   | NO       |                   | name must have an index         |
+| status    | varchar     | 1    | NO       | A                 | A-Active, I-Inactive            |
+| created   | timestamp   |      | NO       | current_timestamp |                                 |
+| updated   | timestamp   |      | NO       | current_timestamp |                                 |
+
+
+### **RoomUser**
+
+| NAME           | TYPE        | SIZE | NOT NULL | DEFAULT           | DESCRIPTION                     |
+|----------------|-------------|------|----------|-------------------|---------------------------------|
+| id             | uuid        |      | NO       |                   | uuid primary key                |   
+| userid         | uuid        |      | NO       |                   | uuid user table                 |
+| username       | varchar     | 15   | NO       |                   | username must have an index     |
+| userstatus     | varchar     | 1    | NO       | A                 | A-Active, I-Inactive            |
+| roomid         | uuid        |      | NO       |                   | uuid room                       |
+| roomname       | varchar     | 50   | NO       |                   | room must have an index         |
+| roomstatus     | varchar     | 1    | NO       | A                 | A-Active, I-Inactive            |
+| created        | timestamp   |      | NO       | current_timestamp |                                 |
+| updated        | timestamp   |      | NO       | current_timestamp |                                 |
+
+
+### **RoomUserMessage** 
+
+- PRIMARY KEY (roomid, userid, created)
+
+| NAME           | TYPE        | SIZE | NOT NULL | DEFAULT           | DESCRIPTION                     |
+|----------------|-------------|------|----------|-------------------|---------------------------------|
+| id             | uuid        |      | NO       |                   | uuid                 |   
+| userid         | uuid        |      | NO       |                   | uuid user table                 |
+| username       | varchar     | 15   | NO       |                   | username must be an index       |
+| roomid         | uuid        |      | NO       |                   | roomid must be an index         |
+| roomname       | varchar     | 50   | NO       |                   | roomname must be an index       |
+| roomstatus     | varchar     | 1    | NO       | A                 | A-Active, I-Inactive            |
+| messagecontent | varchar     | 255  | NO       |                   | Message content                 |
+| created        | timestamp   |      | NO       | current_timestamp |                                 |
+| updated        | timestamp   |      | NO       | current_timestamp |                                 |
+
+
+
+Note: Cassandra database does not have a column size property. We must limit the number of characters on the application side.
+
+
+### **Queries**
+
+- Find user
+```sql
+SELECT id, username, firstname, lastname, email, age, created, updated FROM app.user where id = ?;  
 ```
 
-### **Partitioning Strategy**
+- Find room users
+```sql
+SELECT id, username, userstatus, roomid, roomname, roomstatus, created, updated FROM app.roomUser where userid = ?;   
+```
 
-- **Rooms**: Could be partitioned by `region` or `tenant_id` if multi-tenant.
-- **Participants**: Partition by `room_id` for faster lookup.
-- **Tracks**: Co-located with participants for better locality.
+- Find room messages
+```sql
+SELECT id, userid, username, roomid, roomname, messagecontent, messagetype, created, updated FROM app.roomUserMessage where roomid = ?;     
+```
 
-### **Main Queries**
+- Find user room messages by room
+```sql
+SELECT id, userid, username, roomid, roomname, messagecontent, messagetype, created, updated FROM app.roomUserMessage where roomid = ?;     
+```
 
-1. Fetch all participants in a room:
+- Find user room messages by roomtid, userid and created date
+```sql
+select currentDate(), dateof(now()), id, userid, username, roomname, content, read, type, created from app.message where roomid = ? AND userid = ? AND created >= ? - 1d;
+```
 
-   ```sql
-   SELECT * FROM participants WHERE room_id = :room_id;
-   ```
-
-2. Get active rooms:
-
-   ```sql
-   SELECT * FROM rooms WHERE is_active = true;
-   ```
-
-3. Get tracks by participant:
-
-   ```sql
-   SELECT * FROM tracks WHERE participant_id = :participant_id;
-   ```
-
----
 
 ### Algorithms / Data Structures
 
