@@ -287,6 +287,31 @@ Why?
 ```
 
 
+AWS Cognito
+PROS (+)
+  * Benefit: Easy SMS MFA Setup - Phone verification is provided out of the box with pre-built web pages and verification logic, reducing development time.
+  * Benefit: Great Mobile App Support - Native Android and iOS SDKs are available, enabling seamless integration with mobile applications.
+  * Benefit: Fully Managed Service - AWS handles all infrastructure, scaling, and maintenance, reducing operational overhead.
+  * Benefit: AWS Ecosystem Integration - Seamless integration with other AWS services like Lambda, API Gateway, and S3 for unified security.
+CONS (-)
+  * Problem: Multi-Tenant Limitations - User pools are not multi-tenant by design, requiring a dedicated user pool per tenant which complicates architecture.
+  * Problem: Scalability Constraints - Limited to 1000 user pools per AWS account, which severely restricts multi-tenant application scaling.
+  * Problem: Limited Customization - Restricted ability to customize authentication flows and user interface compared to self-hosted solutions.
+  * Problem: Vendor Lock-in - Tight integration with AWS ecosystem makes migration to other platforms or hybrid cloud approaches difficult.
+
+Keycloak
+PROS (+)
+  * Benefit: Multi-Tenant Architecture - Easily configurable for multi-tenant scenarios with realm-based isolation and flexible tenant management.
+  * Benefit: Open Source Flexibility - Open-source solution provides full control over customization, extensions, and deployment strategies.
+  * Benefit: Cost Efficiency - Free software with only infrastructure costs, providing significant cost savings for large-scale deployments.
+  * Benefit: High Customization - Highly customizable authentication flows, themes, and extensions to meet specific business requirements.
+  * Benefit: Platform Agnostic - Can be deployed on any infrastructure or cloud provider, avoiding vendor lock-in.
+CONS (-)
+  * Problem: Operational Overhead - Self-hosted solution requires managing infrastructure, updates, security patches, and high availability setup.
+  * Problem: Limited Mobile SDKs - No native mobile SDKs available, requiring custom integration work for mobile applications.
+  * Problem: Complexity - More complex to set up and configure compared to managed services, requiring specialized expertise.
+  * Problem: Maintenance Burden - Requires ongoing maintenance, monitoring, and troubleshooting that managed services handle automatically.
+  
 =======
 
 ## Application Load Balancer (ALB)
