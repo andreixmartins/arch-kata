@@ -1,5 +1,115 @@
 ### 6.1 Class Diagram
 
+```mermaid
+classDiagram
+    class UserService {
+        -UserRepository repository
+        -AuthenticationService authService
+        -TokenService tokenService
+        -KafkaProducer producer
+        +registerUser(request: UserRegistrationRequest): UserResponse
+        +authenticateUser(username: String, password: String, tenantId: UUID): LoginResponse
+        +getUserById(userId: UUID): User
+        +updateUserProfile(userId: UUID, patch: UserProfilePatch): User
+        +changePassword(userId: UUID, currentPassword: String, newPassword: String): void
+        +deactivateUser(userId: UUID): void
+        +getTenantUsers(tenantId: UUID, pagination: PaginationRequest): UserListResponse
+        +logout(tokenHash: String): void
+    }
+
+    class UserRepository {
+        -DatabaseClient client
+        -RedisClient redisClient
+        +save(user: User): User
+        +findById(tenantId: UUID, userId: UUID): User
+        +findByUsername(tenantId: UUID, username: String): User
+        +findByEmail(tenantId: UUID, email: String): User
+        +updateProfile(userId: UUID, patch: UserProfilePatch): User
+        +updatePassword(userId: UUID, passwordHash: String): void
+        +setActive(userId: UUID, active: boolean): void
+        +findByTenant(tenantId: UUID, pagination: PaginationRequest): List~User~
+    }
+
+    class AuthenticationService {
+        -PasswordHasher passwordHasher
+        -TokenService tokenService
+        +validateCredentials(user: User, password: String): boolean
+        +hashPassword(password: String): String
+        +generateTokens(user: User): TokenPair
+    }
+
+    class TokenService {
+        -JWTConfig jwtConfig
+        -RedisClient redisClient
+        +generateAccessToken(user: User): String
+        +generateRefreshToken(user: User): String
+        +validateToken(token: String): TokenClaims
+        +revokeToken(tokenHash: String): void
+        +storeSession(session: UserSession): void
+    }
+
+    class User {
+        -UUID id
+        -String username
+        -String email
+        -String passwordHash
+        -String firstName
+        -String lastName
+        -UUID tenantId
+        -String role
+        -String profileImageUrl
+        -Instant createdAt
+        -Instant updatedAt
+        -Instant lastLoginAt
+        +isActive(): boolean
+        +getFullName(): String
+    }
+
+    class UserRegistrationRequest {
+        -String username
+        -String email
+        -String password
+        -String firstName
+        -String lastName
+        -UUID tenantId
+    }
+
+    class UserProfilePatch {
+        -String firstName
+        -String lastName
+        -String email
+        -String profileImageUrl
+    }
+
+    class LoginResponse {
+        -String userId
+        -String accessToken
+        -String refreshToken
+        -Integer expiresIn
+        -User user
+    }
+
+    class UserSession {
+        -String tokenHash
+        -UUID userId
+        -String platform
+        -String ipAddress
+        -Instant createdAt
+        -Instant expiresAt
+    }
+
+    class PaginationRequest {
+        -Integer page
+        -Integer size
+        -String sort
+    }
+
+    UserService --> UserRepository
+    UserService --> AuthenticationService
+    UserService --> TokenService
+    AuthenticationService --> TokenService
+    TokenService --> UserSession
+```
 
 ### 6.2 Contract Documentation
 
