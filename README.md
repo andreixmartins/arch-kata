@@ -504,7 +504,7 @@ Exemplos of other components: Batch jobs, Events, 3rd Party Integrations, Stream
 =======
 ## Report Service
 ### 6.1 - Report Service Class Diagram
-here go the image
+<img width="682" height="681" alt="Screenshot 2025-09-21 at 20 14 17" src="https://github.com/user-attachments/assets/57f8f57d-9c7c-4bd4-be09-df9ad14dba8b" />
 
 ### 6.2 - Report Service Contract Documentation
 - ReportService
@@ -529,7 +529,27 @@ here go the image
   * requestReport(params: Map) → Input: parameters → Output: Report
 
 ### 6.3 - Report Service Persistence Model
-here go the image
+#### **User**
+
+| NAME      | TYPE        | SIZE | NOT NULL | DEFAULT           | DESCRIPTION                     |
+|-----------|-------------|------|----------|-------------------|---------------------------------|
+| id        | uuid        |      | NO       |                   | uuid primary key                |                 
+| groupid   | uuid        |      | NO       |                   | uuid primary key                |                 
+| username  | varchar     | 15   | NO       |                   | username must have an index     |
+| firstname | varchar     | 30   | NO       |                   |                                 |
+| lastname  | varchar     | 30   | NO       |                   |                                 |
+| email     | varchar     | 50   | NO       |                   |                                 |
+| age       | tinyint     | 3    | NO       |                   |                                 |
+| created   | timestamp   |      | NO       | current_timestamp |                                 |
+| updated   | timestamp   |      | NO       | current_timestamp |                                 |
+
+#### **Reports**
+
+| NAME      | TYPE        | SIZE | NOT NULL | DEFAULT           | DESCRIPTION                     |
+|-----------|-------------|------|----------|-------------------|---------------------------------|
+| id        | uuid        |      | NO       |                   | uuid primary key                |                 
+| title     | varchar     |      | NO       |                   |                                 |                 
+| content   | text        | 15   | NO       |                   |                                 |
 
 Main Queries
 Insert:
