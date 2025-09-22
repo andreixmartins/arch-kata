@@ -78,6 +78,8 @@ Here there will be a bunch of diagrams, to understand the solution.
 
 🗂️ 4.1 Overall architecture: Show the big picture, relationship between macro components.
 
+<img src="images/overall_diagram_simple.png">
+
 <img src="images/overall_diagram.png">
 
 🗂️ 4.2 Deployment: Show the infra in a big picture. 
