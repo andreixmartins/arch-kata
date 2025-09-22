@@ -735,6 +735,7 @@ CREATE TABLE reports (
 - Circuit breaker Pattern
 - Retry with backoff
 - Queue for message notifications
+- REDIS SET data structure for POCs Caching. 
 
 
 Samples of other components: Batch jobs, Events, 3rd Party Integrations, Streaming, ML Models, ChatBots, etc... 
