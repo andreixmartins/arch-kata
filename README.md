@@ -732,7 +732,8 @@ CREATE TABLE reports (
 
 #### 6.4 - Algorithms/Data Structures : Specific algos that need to be used, along size with spesific data structures.
 
-- Queue for creating/deleting messages
+- Circuit breaker Pattern
+- Retry with backoff
 - Queue for message notifications
 
 
