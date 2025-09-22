@@ -380,7 +380,6 @@ path: <span style='color:#FFBE33;font-weight: bold;'>v1/account/profile</span>
     lastName : "string",    
     email : "string",        
     picture : "string",   
-    friendsRequest "string" //(e.g NO ONE, ANYONE)  
   }    
   ```    
   
