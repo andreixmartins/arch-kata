@@ -694,19 +694,20 @@ path: <span style='color:#FFBE33;font-weight: bold;'>v1/report/billing</span>
 | updated        | timestamp   |      | NO       | current_timestamp |                                 |
 
 
-### **RoomUserMessage** 
+### **PocUser** 
 
-- PRIMARY KEY (roomid, userid, created)
+- PRIMARY KEY (userid, tenantid, created)
 
 | NAME           | TYPE        | SIZE | NOT NULL | DEFAULT           | DESCRIPTION                     |
 |----------------|-------------|------|----------|-------------------|---------------------------------|
-| id             | uuid        |      | NO       |                   | uuid                 |   
+| id             | uuid        |      | NO       |                   | uuid                            |   
 | userid         | uuid        |      | NO       |                   | uuid user table                 |
-| username       | varchar     | 15   | NO       |                   | username must be an index       |
-| roomid         | uuid        |      | NO       |                   | roomid must be an index         |
-| roomname       | varchar     | 50   | NO       |                   | roomname must be an index       |
-| roomstatus     | varchar     | 1    | NO       | A                 | A-Active, I-Inactive            |
-| messagecontent | varchar     | 255  | NO       |                   | Message content                 |
+| tenantid       | uuid        |      | NO       |                   | uuid user table                 |
+| name           | varchar     |      | NO       |                   | POC Name                        |
+| language       | uuid        |      | NO       |                   | POC languages e.g java, js, GO  |
+| favorite       | integer     | 1    | NO       | N                 | N - NO - Y - YES                |
+| tags           | varchar     | 255  | NO       |                   | POC Tags                        |
+| repourl        | varchar     | 255  | NO       |                   | POC Repo URL                    |
 | created        | timestamp   |      | NO       | current_timestamp |                                 |
 | updated        | timestamp   |      | NO       | current_timestamp |                                 |
 
