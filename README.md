@@ -672,23 +672,24 @@ path: <span style='color:#FFBE33;font-weight: bold;'>v1/report/billing</span>
 | id        | uuid        |      | NO       |                   | uuid primary key                |   
 | userid    | uuid        |      | NO       |                   | uuid user table                 |
 | tenantid  | uuid        |      | NO       |                   | uuid user table                 |                 
+| date      | timestamp   |      | NO       |                   | Dojo scheduled date             |                 
 | name      | varchar     | 50   | NO       |                   | name must have an index         |
 | status    | varchar     | 1    | NO       | A                 | A-Active, I-Inactive            |
 | created   | timestamp   |      | NO       | current_timestamp |                                 |
 | updated   | timestamp   |      | NO       | current_timestamp |                                 |
 
 
-### **RoomUser**
+### **Billing**
 
 | NAME           | TYPE        | SIZE | NOT NULL | DEFAULT           | DESCRIPTION                     |
 |----------------|-------------|------|----------|-------------------|---------------------------------|
 | id             | uuid        |      | NO       |                   | uuid primary key                |   
-| userid         | uuid        |      | NO       |                   | uuid user table                 |
-| username       | varchar     | 15   | NO       |                   | username must have an index     |
-| userstatus     | varchar     | 1    | NO       | A                 | A-Active, I-Inactive            |
-| roomid         | uuid        |      | NO       |                   | uuid room                       |
-| roomname       | varchar     | 50   | NO       |                   | room must have an index         |
-| roomstatus     | varchar     | 1    | NO       | A                 | A-Active, I-Inactive            |
+| tenantid       | uuid        |      | NO       |                   | uuid user table                 |
+| plan           | varchar     | 15   | NO       |                   | M - monthly - Y - yearly        |
+| price          | float       | 10   | NO       | A                 | Total amount                    |
+| expirationdate | timestamp   |      | NO       |                   | Expiration date plan            |
+| autorenew      | integer     | 1    | NO       |                   | 0 - NO - 1 - YES                |
+| paymentgateway | varchar     | 10   | NO       |                   | Payment gateway name            |
 | created        | timestamp   |      | NO       | current_timestamp |                                 |
 | updated        | timestamp   |      | NO       | current_timestamp |                                 |
 
