@@ -489,7 +489,20 @@ path: <span style='color:#FFBE33;font-weight: bold;'>v1/user/picture</span>
   }
   ```
 
+> **BILLING**
 
+- payment
+
+> **DOJO**
+
+- create room
+- end session
+- start session
+
+> **REPORT**
+
+- anual poc report
+- billing
 
 #### 6.3 Persistence Model
 
@@ -652,7 +665,7 @@ Describe your stack, what databases would be used, what servers, what kind of co
 - Monitoring: Prometheus + Grafana
 - Logging: Loki
 - Tracing: Xray
-- Realtime video - WebRTC + WebSocket
+- Realtime video - NodeJS + WebRTC + WebSocket
 
 ### 🖹 12. References
 
