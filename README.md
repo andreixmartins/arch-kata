@@ -307,7 +307,7 @@ path: <span style='color:#FFBE33;font-weight: bold;'>v1/login</span>
   - response
   ```json
   {
-    userId : "integer",
+    userId : "string",
     token : "string"
   }
   ```
@@ -370,7 +370,7 @@ path: <span style='color:#FFBE33;font-weight: bold;'>v1/account/profile</span>
   - request
   ```json  
   {
-    user_id: long
+    user_id: "string"
   }    
   ```  
   - response
@@ -418,7 +418,7 @@ path: <span style='color:#FFBE33;font-weight: bold;'>v1/user/notification</span>
   - request
   ```json
   {
-    user_id :long
+    user_id : "string"  
     limit : integer 
     offset: integer
   }
@@ -440,7 +440,7 @@ path: <span style='color:#FFBE33;font-weight: bold;'>v1/user/messages</span>
   - request
   ```json
   {
-    user_id :long
+    user_id : "string"
     room_id :integer
   }
   ```
@@ -501,8 +501,8 @@ path: <span style='color:#FFBE33;font-weight: bold;'>v1/user/picture</span>
   - request
   ```json
   {
-    user_id long,
-    image "string"    
+    user_id: long,
+    image: "string"    
   }
   ```
 
@@ -518,14 +518,16 @@ path: <span style='color:#FFBE33;font-weight: bold;'>v1/user/picture</span>
 ### <span style='color:#3BC143 ;font-weight: bold;'>PAYMENT</span>
 method: <span style='color:#FFBE33;font-weight: bold;'>POST</span>
 path: <span style='color:#FFBE33;font-weight: bold;'>v1/payment</span>
-- Perform payment of subscription purchase
+- Perform payment of subscription purchase using payment gateway
   1. tenant_id is required
-  2. encrypyted credit card data 
+  2. total is required 
+  3. payment_gateway is required
   - request
   ```json
   {
-    credit_card_data "string",
-    tenant_id long    
+    tenant_id: "string",
+    total: "float",
+    payment_gateway: "string"  
   }
   ```
 
@@ -549,10 +551,10 @@ path: <span style='color:#FFBE33;font-weight: bold;'>v1/dojo/create</span>
   - request
   ```json
   {
-    tenant_id long,
-    dojo_date date        
-    members "array[user_id]",
-    subject "string"    
+    tenant_id: "long",
+    dojo_date: "date"        
+    members: [],
+    subject: "string"    
   }
   ```
 
