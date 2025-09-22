@@ -35,10 +35,9 @@ Example:
 1. Security is non-negociable! Security at-rest, transite, threat analysis and review for by at least 3 different people.
 2. Mobile-native: We want a native app using Swift and Kotlin 
 3. Cloud-Native: All backend must be 100% cloud native, using AWS Cloud services
-4. Microservices: Do not use AWS Lambdas
+4. Microservices: Do not use AWS Lambdas. App services must use the microservice architecture
 5. Cache: AWS Elastic Cache to cache user data information
 6. Tests: Employ unit tests, integration tests, regression tests, chaos tests
-7. Microservices: App services must use the microservice architecture
 ```
 Recommended Learning: http://diego-pacheco.blogspot.com/2020/05/education-vs-learning.html
 
