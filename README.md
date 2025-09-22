@@ -392,7 +392,7 @@ path: <span style='color:#FFBE33;font-weight: bold;'>v1/user</span>
   - request
   ```json
   {
-    user_id : long,      
+    user_id  : "string",      
     username : "string"      
   }    
   ```   
@@ -501,7 +501,7 @@ path: <span style='color:#FFBE33;font-weight: bold;'>v1/user/picture</span>
   - request
   ```json
   {
-    user_id: long,
+    user_id: "string",
     image: "string"    
   }
   ```
@@ -509,7 +509,7 @@ path: <span style='color:#FFBE33;font-weight: bold;'>v1/user/picture</span>
   - response
   ```json
   {
-    success boolean  
+    success: "boolean"  
   }
   ```
 
@@ -574,8 +574,8 @@ path: <span style='color:#FFBE33;font-weight: bold;'>v1/dojo/start</span>
   - request
   ```json
   {
-    tenant_id long,
-    dojo_id long        
+    tenant_id: "long",
+    dojo_id: "long"        
   }
   ```
 
@@ -595,8 +595,8 @@ path: <span style='color:#FFBE33;font-weight: bold;'>v1/dojo/stop</span>
   - request
   ```json
   {
-    tenant_id long,
-    dojo_id long        
+    tenant_id:  "string",
+    dojo_id: "long"        
   }
   ```
 
@@ -625,7 +625,7 @@ path: <span style='color:#FFBE33;font-weight: bold;'>v1/report/anual</span>
   - response
   ```json
   {
-    report_id long
+    report_id: long
   }
   ```
 ### <span style='color:#3BC143 ;font-weight: bold;'>REPORT_BILLING</span>
@@ -637,14 +637,14 @@ path: <span style='color:#FFBE33;font-weight: bold;'>v1/report/billing</span>
   - request
   ```json
   {
-    tenant_id long
+    tenant_id: "string"
   }
   ```
 
   - response
   ```json
   {
-    report_id long
+    report_id: long
   }
   ```
 
