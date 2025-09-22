@@ -655,7 +655,6 @@ path: <span style='color:#FFBE33;font-weight: bold;'>v1/report/billing</span>
 |-----------|-------------|------|----------|-------------------|---------------------------------|
 | id        | uuid        |      | NO       |                   | uuid primary key                |                 
 | tenantid  | uuid        |      | NO       |                   | uuid user table                 |                 
-| groupid   | uuid        |      | NO       |                   | uuid primary key                |                 
 | username  | varchar     | 15   | NO       |                   | username must have an index     |
 | firstname | varchar     | 30   | NO       |                   |                                 |
 | lastname  | varchar     | 30   | NO       |                   |                                 |
@@ -667,7 +666,7 @@ path: <span style='color:#FFBE33;font-weight: bold;'>v1/report/billing</span>
 
 ### **Room**
 
-- PRIMARY KEY (tenantid, userid, date)
+- PRIMARY KEY (userid, created)
 
 | NAME      | TYPE        | SIZE | NOT NULL | DEFAULT           | DESCRIPTION                     |
 |-----------|-------------|------|----------|-------------------|---------------------------------|
