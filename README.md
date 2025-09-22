@@ -256,7 +256,7 @@ What is a majore component? A service, a lambda, a important ui, a generalized a
 
 ## 6.1 - Class Diagram 
 
-<img src="images/class_diagram.png">
+<img src="images/class_diagram_v2.png">
 
 
 ## 6.2 - Contract Documentation
