@@ -785,22 +785,22 @@ For each different kind of data store i.e (Postgres, Memcached, Elasticache, S3,
 SELECT id, username, firstname, lastname, email, age, created, updated FROM app.user where id = ?;  
 ```
 
-- Find room users
+- Find poc by name
 ```sql
-SELECT id, username, userstatus, roomid, roomname, roomstatus, created, updated FROM app.roomUser where userid = ?;   
+SELECT id, name, language, description, favorite, tags FROM app.pocuser where userid = ? and name = ?;   
 ```
 
-- Find room messages
+- Find poc by language
 ```sql
-SELECT id, userid, username, roomid, roomname, messagecontent, messagetype, created, updated FROM app.roomUserMessage where roomid = ?;     
+SELECT id, name, language, description, favorite, tags FROM app.pocuser where userid = ? and language = ?;   
 ```
 
-- Find user room messages by room
+- Find poc by tag
 ```sql
-SELECT id, userid, username, roomid, roomname, messagecontent, messagetype, created, updated FROM app.roomUserMessage where roomid = ?;     
+SELECT id, name, language, description, favorite, tags FROM app.pocuser where userid = ? and tag = ?;   
 ```
 
-- Find user room messages by roomtid, userid and created date
+- Find user room by user, userid and created date
 ```sql
 select currentDate(), dateof(now()), id, userid, username, roomname, content, read, type, created from app.message where roomid = ? AND userid = ? AND created >= ? - 1d;
 ```
