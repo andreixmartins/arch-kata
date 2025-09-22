@@ -491,20 +491,138 @@ path: <span style='color:#FFBE33;font-weight: bold;'>v1/user/picture</span>
   }
   ```
 
-> **BILLING**
+**BILLING**
 
-- payment
+### <span style='color:#3BC143 ;font-weight: bold;'>PAYMENT</span>
+method: <span style='color:#FFBE33;font-weight: bold;'>POST</span>
+path: <span style='color:#FFBE33;font-weight: bold;'>v1/payment</span>
+- Perform payment of subscription purchase
+  1. tenant_id is required
+  2. encrypyted credit card data 
+  - request
+  ```json
+  {
+    credit_card_data "string",
+    tenant_id long    
+  }
+  ```
+
+  - response
+  ```json
+  {
+    success boolean  
+  }
+  ```
 
 > **DOJO**
 
-- create room
-- end session
-- start session
+### <span style='color:#3BC143 ;font-weight: bold;'>CREATE_DOJO_ROOM</span>
+method: <span style='color:#FFBE33;font-weight: bold;'>POST</span>
+path: <span style='color:#FFBE33;font-weight: bold;'>v1/dojo/create</span>
+- Create a Dojo Room for a tenant
+  1. tenant_id is required
+  2. schedule date for a session
+  3. team members
+  4. subject 
+  - request
+  ```json
+  {
+    tenant_id long,
+    dojo_date date        
+    members "array[user_id]",
+    subject "string"    
+  }
+  ```
+
+  - response
+  ```json
+  {
+    dojo_id long  
+  }
+  ```
+### <span style='color:#3BC143 ;font-weight: bold;'>START_DOJO</span>
+method: <span style='color:#FFBE33;font-weight: bold;'>POST</span>
+path: <span style='color:#FFBE33;font-weight: bold;'>v1/dojo/start</span>
+- Start a Recording of a Dojo session
+  1. tenant_id is required
+  2. dojo_id is required
+  
+  - request
+  ```json
+  {
+    tenant_id long,
+    dojo_id long        
+  }
+  ```
+
+  - response
+  ```json
+  {
+    success boolean
+  }
+  ```
+### <span style='color:#3BC143 ;font-weight: bold;'>STOP_DOJO</span>
+method: <span style='color:#FFBE33;font-weight: bold;'>POST</span>
+path: <span style='color:#FFBE33;font-weight: bold;'>v1/dojo/stop</span>
+- Stop a  record of a Dojo Room session
+  1. tenant_id is required
+  2. dojo_id is required
+  
+  - request
+  ```json
+  {
+    tenant_id long,
+    dojo_id long        
+  }
+  ```
+
+  - response
+  ```json
+  {
+    success boolean
+  }
+  ```
 
 > **REPORT**
 
-- anual poc report
-- billing
+### <span style='color:#3BC143 ;font-weight: bold;'>ANUAL_REPORT</span>
+method: <span style='color:#FFBE33;font-weight: bold;'>POST</span>
+path: <span style='color:#FFBE33;font-weight: bold;'>v1/report/anual</span>
+- Generate an anual report for entire year from specific tenant 
+  1. tenant_id is required
+    
+  - request
+  ```json
+  {
+    tenant_id long
+  }
+  ```
+
+  - response
+  ```json
+  {
+    report_id long
+  }
+  ```
+### <span style='color:#3BC143 ;font-weight: bold;'>REPORT_BILLING</span>
+method: <span style='color:#FFBE33;font-weight: bold;'>POST</span>
+path: <span style='color:#FFBE33;font-weight: bold;'>v1/report/billing</span>
+- Generate a Billing report for a specific tenant
+  1. tenant_id is required
+    
+  - request
+  ```json
+  {
+    tenant_id long
+  }
+  ```
+
+  - response
+  ```json
+  {
+    report_id long
+  }
+  ```
 
 #### 6.3 Persistence Model
 
