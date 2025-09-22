@@ -103,9 +103,10 @@ Major Decisions:
 ```
 Tradeoffs:
 ```
-1. Redis vs AWS Elastic Cache
-2. Serverless vs Microservices
-3. Redis vs Enbeded Caches
+1. AWS Cognito vs Keycloak
+2. AWS ECS vs AWS EKS
+3. AWS KEYSPACES vs AWS RDS POSTGRES
+4. Redis (Self-Hosted) vs AWS Elastic Cache
 ```
 
 
