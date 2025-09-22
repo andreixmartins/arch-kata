@@ -800,9 +800,9 @@ SELECT id, name, language, description, favorite, tags FROM app.pocuser where us
 SELECT id, name, language, description, favorite, tags FROM app.pocuser where userid = ? and tag = ?;   
 ```
 
-- Find user room by user, userid and created date
+- Find room by user, userid and created date
 ```sql
-select currentDate(), dateof(now()), id, userid, username, roomname, content, read, type, created from app.message where roomid = ? AND userid = ? AND created >= ? - 1d;
+select currentDate(), dateof(now()), id, userid, name, created from app.room where userid = ? AND created >= ? - 1d;
 ```
 
 ### 🖹 11. Technology Stack
