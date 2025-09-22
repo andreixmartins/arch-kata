@@ -108,6 +108,7 @@ Tradeoffs:
 2. AWS ECS vs AWS EKS
 3. AWS KEYSPACES vs AWS RDS POSTGRES
 4. Redis (Self-Hosted) vs AWS Elastic Cache
+5. LiveKit vs WebRTC
 ```
 
 
@@ -246,6 +247,28 @@ CONS (+)
   * Limitations: ElastiCache runs only within the Amazon Web Services ecosystem, you may be concerned about vendor lock-in
 ```
 
+## LiveKit vs WebRTC (self hosted)
+
+LiveKit
+```
+PROS (+) 
+  * Scalability: Designed with cloud-native scaling in mind; Kubernetes-ready with multi-node support and autoscaling.
+  * Setup and Maintenance: Easy to deploy with prebuilt Docker images and Helm charts. Managed cloud option available (LiveKit Cloud).
+  * Availability: LiveKit Cloud offers high availability out of the box with managed infrastructure and SLAs.
+CONS (+)
+  * Complexity: Abstracted logic limits low-level control. Custom media routing or deep protocol tweaks are not straightforward.
+  * Cost: LiveKit Cloud can become expensive at scale compared to self-hosted SFUs like MediaSoup.
+```
+
+WebRTC
+```
+PROS (+) 
+  * Scalability: Can scale with custom SFU (Selective Forwarding Unit) setup.
+  * Optimization: Can deeply optimize SFU settings.
+CONS (+)
+  * Setup and Maintenance: Must build it from scratch. Must self-host, integrate, and configure.
+  * Security: You are Responsible for correct, secure and authentication setups.
+```
 
 PS: Be careful to not confuse problem with explanation. 
 <BR/>Recommended reading: http://diego-pacheco.blogspot.com/2023/07/tradeoffs.html
