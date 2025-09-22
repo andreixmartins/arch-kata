@@ -663,7 +663,7 @@ Describe your stack, what databases would be used, what servers, what kind of co
 - Monitoring: Prometheus + Grafana
 - Logging: Loki
 - Tracing: Xray
-- Realtime video - NodeJS + WebRTC + WebSocket
+- Realtime video - NodeJS + WebRTC
 
 ### 🖹 12. References
 
