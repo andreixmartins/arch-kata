@@ -642,7 +642,7 @@ Explain the techniques, principles,types of observability that will be used, key
 
 For each different kind of data store i.e (Postgres, Memcached, Elasticache, S3, Neo4J etc...) describe the schemas, what would be stored there and why, main queries, expectations on performance. Diagrams are welcome but you really need some dictionaries.
 
-- AWS S3 for videos, images, text files
+- AWS S3 for videos, images, text files, reports
 - AWS RDS Aurora for structured data
 - AWS Elastic cache for caching data
 - AWS Keyspaces (Apache Cassandra)
@@ -659,8 +659,8 @@ Describe your stack, what databases would be used, what servers, what kind of co
 - Orchestration:	EKS Kubernetes
 - API: REST
 - Auth: OAuth2 + JWT
-- Databases: PostgreSQL + Redis
-- Messaging: Kafka
+- Databases: AWS Keyspaces (Cassandra) PostgreSQL + Redis
+- Messaging: Kafka (AWS MSK)
 - CI/CD: GitHub Actions + ArgoCD
 - Monitoring: Prometheus + Grafana
 - Logging: Loki
