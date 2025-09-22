@@ -667,6 +667,8 @@ path: <span style='color:#FFBE33;font-weight: bold;'>v1/report/billing</span>
 
 ### **Room**
 
+- PRIMARY KEY (tenantid, userid, date)
+
 | NAME      | TYPE        | SIZE | NOT NULL | DEFAULT           | DESCRIPTION                     |
 |-----------|-------------|------|----------|-------------------|---------------------------------|
 | id        | uuid        |      | NO       |                   | uuid primary key                |   
@@ -680,6 +682,8 @@ path: <span style='color:#FFBE33;font-weight: bold;'>v1/report/billing</span>
 
 
 ### **Billing**
+
+- PRIMARY KEY (tenantid, paymentgateway)
 
 | NAME           | TYPE        | SIZE | NOT NULL | DEFAULT           | DESCRIPTION                     |
 |----------------|-------------|------|----------|-------------------|---------------------------------|
