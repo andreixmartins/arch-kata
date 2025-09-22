@@ -86,7 +86,7 @@ Here there will be a bunch of diagrams, to understand the solution.
 
 🗂️ 4.3 Use Cases: Make 1 macro use case diagram that list the main capability that needs to be covered. 
 
-<img src="images/use_case_diagram.png">
+<img src="images/use_case_diagram_v2.png">
 
 Recommended Reading: http://diego-pacheco.blogspot.com/2020/10/uml-hidden-gems.html
 
