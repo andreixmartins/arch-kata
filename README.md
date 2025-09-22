@@ -571,34 +571,6 @@ path: <span style='color:#FFBE33;font-weight: bold;'>v1/user/picture</span>
 Note: Cassandra database does not have a column size property. We must limit the number of characters on the application side.
 
 
-### **Queries**
-
-- Find user
-```sql
-SELECT id, username, firstname, lastname, email, age, created, updated FROM app.user where id = ?;  
-```
-
-- Find room users
-```sql
-SELECT id, username, userstatus, roomid, roomname, roomstatus, created, updated FROM app.roomUser where userid = ?;   
-```
-
-- Find room messages
-```sql
-SELECT id, userid, username, roomid, roomname, messagecontent, messagetype, created, updated FROM app.roomUserMessage where roomid = ?;     
-```
-
-- Find user room messages by room
-```sql
-SELECT id, userid, username, roomid, roomname, messagecontent, messagetype, created, updated FROM app.roomUserMessage where roomid = ?;     
-```
-
-- Find user room messages by roomtid, userid and created date
-```sql
-select currentDate(), dateof(now()), id, userid, username, roomname, content, read, type, created from app.message where roomid = ? AND userid = ? AND created >= ? - 1d;
-```
-
-
 
 #### 6.4 - Algorithms/Data Structures : Specific algos that need to be used, along size with spesific data structures.
 
@@ -609,7 +581,6 @@ select currentDate(), dateof(now()), id, userid, username, roomname, content, re
 Samples of other components: Batch jobs, Events, 3rd Party Integrations, Streaming, ML Models, ChatBots, etc... 
 
 Recommended Reading: http://diego-pacheco.blogspot.com/2018/05/internal-system-design-forgotten.html
-
 
 ### 🖹 7. Migrations
 
@@ -643,9 +614,36 @@ Explain the techniques, principles,types of observability that will be used, key
 For each different kind of data store i.e (Postgres, Memcached, Elasticache, S3, Neo4J etc...) describe the schemas, what would be stored there and why, main queries, expectations on performance. Diagrams are welcome but you really need some dictionaries.
 
 - AWS S3 for videos, images, text files, reports
-- AWS RDS Aurora for structured data
+- AWS RDS Postgres for structured data
 - AWS Elastic cache for caching data
 - AWS Keyspaces (Apache Cassandra)
+
+### **AWS Keyspaces (Cassandra) Queries**
+
+- Find user
+```sql
+SELECT id, username, firstname, lastname, email, age, created, updated FROM app.user where id = ?;  
+```
+
+- Find room users
+```sql
+SELECT id, username, userstatus, roomid, roomname, roomstatus, created, updated FROM app.roomUser where userid = ?;   
+```
+
+- Find room messages
+```sql
+SELECT id, userid, username, roomid, roomname, messagecontent, messagetype, created, updated FROM app.roomUserMessage where roomid = ?;     
+```
+
+- Find user room messages by room
+```sql
+SELECT id, userid, username, roomid, roomname, messagecontent, messagetype, created, updated FROM app.roomUserMessage where roomid = ?;     
+```
+
+- Find user room messages by roomtid, userid and created date
+```sql
+select currentDate(), dateof(now()), id, userid, username, roomname, content, read, type, created from app.message where roomid = ? AND userid = ? AND created >= ? - 1d;
+```
 
 ### 🖹 11. Technology Stack
 
