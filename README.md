@@ -711,10 +711,19 @@ path: <span style='color:#FFBE33;font-weight: bold;'>v1/report/billing</span>
 | updated        | timestamp   |      | NO       | current_timestamp |                                 |
 
 
-
 Note: Cassandra database does not have a column size property. We must limit the number of characters on the application side.
 
 
+- AWS POSTGRESQL REPORT TABLE
+
+```sql
+CREATE TABLE reports (
+    id SERIAL PRIMARY KEY, -- SERIAL to auto-increment as a primary key
+    user_id STRING NOT NULL, -- UUID User id comming from Cassandra tables
+    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Date to inform when the report was generated
+    report_type VARCHAR(50) NOT NULL -- Column to inform the report type - BILLING, DOJOS, USERS 
+);  
+```
 
 #### 6.4 - Algorithms/Data Structures : Specific algos that need to be used, along size with spesific data structures.
 
